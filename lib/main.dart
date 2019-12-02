@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             child: Transform.translate(
               offset: Offset(_controller.value * 100, 0),
               child: Material(
-                elevation: 16,
+                elevation: 24,
                 // borderRadius: BorderRadius.only(topLeft: Radius.circular(16), bottomLeft: Radius.circular(16)),
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: Scaffold(
@@ -96,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     iconTheme: Theme.of(context).iconTheme,
                     elevation: 0,
                     centerTitle: true,
-                    title: Text('E'),
+                    title: Image.asset('res/sigma_letter_br.png', alignment: Alignment.center, height: 60),
                     leading: IconButton(
                       onPressed: () {
                         _controller.value > 0.5 ? _controller.reverse() : _controller.forward();
