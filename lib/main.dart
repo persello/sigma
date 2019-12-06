@@ -1,41 +1,115 @@
 import 'package:flutter/material.dart';
 import 'package:sigma/widgets/backdrop_drawer_scaffold.dart';
+import 'package:outline_material_icons/outline_material_icons.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(SigmaApp());
 
-class MyApp extends StatelessWidget {
+class SigmaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sigma',
-      themeMode: ThemeMode.light,
-      theme: ThemeData(
-        brightness: Brightness.light,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-      ),
-      home: MyHomePage(title: 'Sigma'),
+      themeMode: ThemeMode.system,
+      theme:
+          ThemeData(brightness: Brightness.light, primaryColor: Colors.white, fontFamily: 'RobotoCondensed'),
+      darkTheme: ThemeData(brightness: Brightness.dark),
+      home: MainPage(title: 'Sigma'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class MainPage extends StatefulWidget {
+  MainPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     // Backdrop
     return ScaffoldWithBackdropDrawer(
       title: Image.asset('res/sigma_letter_br.png', alignment: Alignment.center, height: 60),
-      drawerContent: Image.asset('res/sigma_letter_br.png', alignment: Alignment.center, height: 60),
+      drawerContent: Material(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              accountName: Text('Name Surname'),
+              accountEmail: Text(
+                'mail@example.com',
+                style: TextStyle(fontWeight: FontWeight.w300),
+              ),
+              currentAccountPicture: Image.asset('res/sigma_letter_br.png'),
+            ),
+            FlatButton(
+              child: ListTile(leading: Icon(OMIcons.home), title: Text('Home')),
+              onPressed: () {},
+            ),
+            FlatButton(
+              child: ListTile(leading: Icon(OMIcons.attachMoney), title: Text('Section')),
+              onPressed: () {},
+            ),
+            FlatButton(
+              child: ListTile(leading: Icon(OMIcons.creditCard), title: Text('Section 2')),
+              onPressed: () {},
+            ),
+            Divider(),
+            FlatButton(
+              child: ListTile(leading: Icon(OMIcons.settings), title: Text('Settings')),
+              onPressed: () {},
+            ),
+            FlatButton(
+              child: ListTile(leading: Icon(OMIcons.info), title: Text('Help and feedback')),
+              onPressed: () {},
+            ),
+          ],
+        ),
+      ),
+      body: Material(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Card(
+              margin: EdgeInsets.symmetric(horizontal: 8.0),
+              elevation: 8,
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '123.45\$',
+                      style: TextStyle(
+                          fontSize: 36, fontFamily: 'LibreCaslonDisplay', fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Card(
+              margin: EdgeInsets.all(8.0),
+              elevation: 8,
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '123.45\$',
+                      style: TextStyle(
+                          fontSize: 36, fontFamily: 'LibreCaslonDisplay', fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

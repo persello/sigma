@@ -139,6 +139,7 @@ class _ScaffoldWithBackdropDrawerState extends State<ScaffoldWithBackdropDrawer>
                             ? _controller.reverse(from: _controller.value)
                             : _controller.forward(from: _controller.value);
                       },
+                      tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
                       // Progress given by controller, so it is linear
                       icon: AnimatedIcon(
                         icon: AnimatedIcons.menu_arrow,
