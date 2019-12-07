@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 /// specifies the content of the [Scaffold]'s body.
 class ScaffoldWithBackdropDrawer extends StatefulWidget {
   ScaffoldWithBackdropDrawer(
-      {Key key, this.body, this.drawerContent, this.title, this.maximumDrawerWidth = 250})
+      {Key key, this.body, this.drawerContent, this.title, this.maximumDrawerWidth = 250, this.actionButton})
       : super(key: key);
 
   /// The content of the [Scaffold]'s body.
@@ -15,6 +15,9 @@ class ScaffoldWithBackdropDrawer extends StatefulWidget {
 
   /// The content of the side drawer.
   final Widget drawerContent;
+
+  /// The floating action button.
+  final Widget actionButton;
 
   /// The widget at the top center of the view, inside the [AppBar].
   final Widget title;
@@ -122,6 +125,8 @@ class _ScaffoldWithBackdropDrawerState extends State<ScaffoldWithBackdropDrawer>
                   backgroundColor: Colors.transparent,
                   // Get body from properties
                   body: widget.body,
+                  floatingActionButton: widget.actionButton,
+                  floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
                   appBar: AppBar(
                     // Transparent, get theme from theme data
                     backgroundColor: Colors.transparent,

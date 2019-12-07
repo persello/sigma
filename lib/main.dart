@@ -9,7 +9,7 @@ class SigmaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sigma',
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
       theme:
           ThemeData(brightness: Brightness.light, primaryColor: Colors.white, fontFamily: 'RobotoCondensed'),
       darkTheme: ThemeData(brightness: Brightness.dark),
@@ -32,7 +32,15 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     // Backdrop
     return ScaffoldWithBackdropDrawer(
-      title: Image.asset('res/sigma_letter_br.png', alignment: Alignment.center, height: 60),
+      title: Image.asset('res/sigma_letter_br.png',
+          alignment: Alignment.center,
+          height: 60,
+          // Color only whan dark, leave bicolor when light
+          color: Theme.of(context).brightness == Brightness.dark ? Theme.of(context).accentColor : null),
+      actionButton: Material(
+        elevation: 16,
+        child: Container(height: 70, width: 70, color: Colors.red, decoration: BoxDecoration(borderRadius: Radius),),
+      ),
       drawerContent: Material(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
