@@ -1,8 +1,12 @@
-on: push
-name: Test, build and release APK
+on:
+  push:
+    tags: 
+      - v*
+
+name: Test, build and release APK on GitHub releases
 jobs:
   build:
-    name: Build APK
+    name: Test, build and create APK
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
