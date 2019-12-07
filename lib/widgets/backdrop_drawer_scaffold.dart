@@ -118,7 +118,7 @@ class _ScaffoldWithBackdropDrawerState extends State<ScaffoldWithBackdropDrawer>
               
               // The material widget behind the scaffold
               child: Material(
-                elevation: 24,
+                elevation: 16,
                 // Scaffold color because scaffold is transparent
                 color: Theme.of(context).scaffoldBackgroundColor,
                 child: Scaffold(

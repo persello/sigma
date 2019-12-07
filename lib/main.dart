@@ -9,7 +9,7 @@ class SigmaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sigma',
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.system,
       theme:
           ThemeData(brightness: Brightness.light, primaryColor: Colors.white, fontFamily: 'RobotoCondensed'),
       darkTheme: ThemeData(brightness: Brightness.dark),
@@ -38,8 +38,18 @@ class _MainPageState extends State<MainPage> {
           // Color only whan dark, leave bicolor when light
           color: Theme.of(context).brightness == Brightness.dark ? Theme.of(context).accentColor : null),
       actionButton: Material(
-        elevation: 16,
-        child: Container(height: 70, width: 70, color: Colors.red, decoration: BoxDecoration(borderRadius: Radius),),
+        elevation: 6,
+        borderRadius: BorderRadius.circular(35),
+        color: Theme.of(context).accentColor,
+        child: ButtonTheme(
+          height: 60,
+          minWidth: 60,
+          child: FlatButton(
+            child: Icon(Icons.add),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+            onPressed: () {},
+          ),
+        ),
       ),
       drawerContent: Material(
         child: Column(
@@ -83,7 +93,7 @@ class _MainPageState extends State<MainPage> {
           children: <Widget>[
             Card(
               margin: EdgeInsets.symmetric(horizontal: 8.0),
-              elevation: 8,
+              elevation: 4,
               child: Padding(
                 padding: const EdgeInsets.all(32.0),
                 child: Column(
@@ -100,7 +110,7 @@ class _MainPageState extends State<MainPage> {
             ),
             Card(
               margin: EdgeInsets.all(8.0),
-              elevation: 8,
+              elevation: 4,
               child: Padding(
                 padding: const EdgeInsets.all(32.0),
                 child: Column(
