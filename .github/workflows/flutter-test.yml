@@ -3,7 +3,7 @@ on: push
 
 jobs:
   build:
-    name: Build and create APK
+    name: Test, build and create APK
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
