@@ -1,9 +1,5 @@
-on:
-  push:
-    tags: 
-      - v*
-
-name: Test, build and release APK on GitHub releases
+on: push
+name: Test and try to build APK
 jobs:
   build:
     name: Test, build and create APK
@@ -19,8 +15,3 @@ jobs:
     - run: flutter pub get
     - run: flutter test
     - run: flutter build apk --debug --split-per-abi
-    - name: Create a release APK
-      uses: ncipollo/release-action@v1
-      with:
-        artifacts: "build/app/outputs/apk/debug/*.apk"
-        token: ${{ secrets.TOKEN }}
