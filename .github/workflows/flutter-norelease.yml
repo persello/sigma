@@ -1,5 +1,6 @@
+name: Test and coverage
 on: push
-name: Try to build APK
+
 jobs:
   build:
     name: Build and create APK
@@ -13,4 +14,13 @@ jobs:
       with:
         channel: 'stable'
     - run: flutter pub get
-    - run: flutter build apk --debug --split-per-abi
+    - run: flutter test --coverage
+    - run: flutter build apk --split-per-abi
+    - name: Parse coverage file
+      uses: devmasx/coverage-check-action@v1.1.0
+      with:
+        type: lcov
+        result_path: coverage/lcov.info
+        min_coverage: 90
+        token: ${{secrets.GITHUB_TOKEN}}
+
