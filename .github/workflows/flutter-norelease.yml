@@ -1,8 +1,8 @@
 on: push
-name: Test and try to build APK
+name: Try to build APK
 jobs:
   build:
-    name: Test, build and create APK
+    name: Build and create APK
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -13,5 +13,4 @@ jobs:
       with:
         channel: 'stable'
     - run: flutter pub get
-    - run: flutter test --coverage
     - run: flutter build apk --debug --split-per-abi
