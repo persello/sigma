@@ -5,26 +5,92 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'dart:math';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:sigma/main.dart';
+import 'package:sigma/widgets/backdrop_drawer_scaffold.dart';
 
 void main() {
-  testWidgets('Mock test', (WidgetTester tester) async {
+  testWidgets('Scaffold with backdrop drawer responds to menu taps', (WidgetTester tester) async {
+    // Create a random width (100 - 1000)
+    int drawerWidth = new Random().nextInt(900) + 100;
+
     // Build our app and trigger a frame.
-    await tester.pumpWidget(SigmaApp());
+    await tester.pumpWidget(MaterialApp(
+        home: ScaffoldWithBackdropDrawer(
+      maximumDrawerWidth: drawerWidth,
+      drawerContent: Text('DRAWER CONTENT'),
+      body: Text('BODY CONTENT'),
+    )));
 
-    // // Verify that our counter starts at 0.
-    // expect(find.text('0'), findsOneWidget);
-    // expect(find.text('1'), findsNothing);
+    // Check widget presence
+    expect(find.text('DRAWER CONTENT'), findsOneWidget);
+    expect(find.text('BODY CONTENT'), findsOneWidget);
 
-    // // Tap the '+' icon and trigger a frame.
-    // await tester.tap(find.byIcon(Icons.add));
-    // await tester.pump();
+    // Drawer icon tap
 
-    // // Verify that our counter has incremented.
-    // expect(find.text('0'), findsNothing);
-    // expect(find.text('1'), findsOneWidget);
+    // Menu is closed
+    assert(tester.getTopLeft(find.byType(Scaffold)).dx == 0);
+
+    // Tap icon
+    await tester.tap(find.byType(AnimatedIcon));
+    await tester.pumpAndSettle(Duration(milliseconds: 500));
+
+    // Menu is opened
+    assert(tester.getTopLeft(find.byType(Scaffold)).dx == drawerWidth.toDouble());
+
+    // Tap icon again
+    await tester.tap(find.byType(AnimatedIcon));
+    await tester.pumpAndSettle(Duration(milliseconds: 500));
+
+    // Menu is closed
+    assert(tester.getTopLeft(find.byType(Scaffold)).dx == 0);
+
+    // Drawer drag
+
+    // Drag menu from side to center
+    await tester.dragFrom(Offset(10, 100), Offset(drawerWidth.toDouble() / 2, 0));
+    await tester.pumpAndSettle(Duration(milliseconds: 500));
+
+    // Menu is opened
+    assert(tester.getTopLeft(find.byType(Scaffold)).dx == drawerWidth.toDouble());
+
+    // Drag menu from center to side
+    await tester.dragFrom(
+        Offset(drawerWidth.toDouble() + 40, 100), Offset(-(drawerWidth.toDouble() / 2 + 1), 0));
+    await tester.pumpAndSettle(Duration(milliseconds: 500));
+
+    // Menu is closed
+    assert(tester.getTopLeft(find.byType(Scaffold)).dx == 0);
+
+    // Drawer fling
+
+    // Fling menu from side to center
+    await tester.flingFrom(Offset(10, 100), Offset(drawerWidth.toDouble() / 4, 0), 500);
+    await tester.pumpAndSettle(Duration(milliseconds: 500));
+
+    // Menu is opened
+    assert(tester.getTopLeft(find.byType(Scaffold)).dx == drawerWidth.toDouble());
+
+    // Drag menu from center to side
+    await tester.flingFrom(
+        Offset(drawerWidth.toDouble() + 40, 100), Offset(-(drawerWidth.toDouble() / 4), 0), 500);
+    await tester.pumpAndSettle(Duration(milliseconds: 500));
+
+    // Menu is closed
+    assert(tester.getTopLeft(find.byType(Scaffold)).dx == 0);
+
+    // Gesture rejection
+
+    // Drag menu from side but out of start area to center
+    await tester.dragFrom(Offset(51, 100), Offset(drawerWidth.toDouble() / 2, 0));
+    await tester.pumpAndSettle(Duration(milliseconds: 500));
+
+    // Menu is closed
+    assert(tester.getTopLeft(find.byType(Scaffold)).dx == 0);
   });
 }
