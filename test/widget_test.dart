@@ -15,11 +15,16 @@ import 'package:sigma/main.dart';
 import 'package:sigma/widgets/backdrop_drawer_scaffold.dart';
 
 void main() {
+  testWidgets('Main app pump test', (WidgetTester tester) async {
+    // Build main widget
+    await tester.pumpWidget(SigmaApp());
+  });
+
   testWidgets('Scaffold with backdrop drawer responds to menu taps', (WidgetTester tester) async {
     // Create a random width (100 - 1000)
     int drawerWidth = new Random().nextInt(900) + 100;
 
-    // Build our app and trigger a frame.
+    // Build scaffold
     await tester.pumpWidget(MaterialApp(
         home: ScaffoldWithBackdropDrawer(
       maximumDrawerWidth: drawerWidth,
