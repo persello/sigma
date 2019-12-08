@@ -21,8 +21,7 @@ void main() {
   });
 
   testWidgets('Scaffold with backdrop drawer responds to menu taps', (WidgetTester tester) async {
-    // Create a random width (100 - 1000)
-    int drawerWidth = new Random().nextInt(900) + 100;
+    int drawerWidth = 500;
 
     // Build scaffold
     await tester.pumpWidget(MaterialApp(
