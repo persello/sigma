@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sigma/widgets/backdrop_drawer_scaffold.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
+import 'package:sigma/add.dart';
+import 'package:sigma/widgets/backdrop_drawer_scaffold.dart';
+import 'package:sigma/widgets/corner_radius_transition.dart';
+import 'package:sigma/widgets/radial_exapnsion.dart';
+import 'package:sigma/widgets/transparent_route.dart';
 
 void main() => runApp(SigmaApp());
 
@@ -11,9 +15,13 @@ class SigmaApp extends StatelessWidget {
       title: 'Sigma',
       themeMode: ThemeMode.system,
       theme:
-          ThemeData(brightness: Brightness.light, primaryColor: Colors.white, fontFamily: 'RobotoCondensed'),
+          ThemeData(brightness: Brightness.light, accentColor: Colors.pink, primaryColor: Colors.white, fontFamily: 'RobotoCondensed'),
       darkTheme: ThemeData(brightness: Brightness.dark),
-      home: MainPage(title: 'Sigma'),
+      initialRoute: '/',
+      routes: <String, WidgetBuilder>{
+        '/': (context) => MainPage(),
+        '/add': (context) => AddPage(),
+      },
     );
   }
 }
@@ -23,11 +31,15 @@ class MainPage extends StatefulWidget {
 
   final String title;
 
+  static RectTween createRectTween(Rect begin, Rect end) {
+    return MaterialRectArcTween(begin: begin, end: end);
+  }
+
   @override
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     // Backdrop
@@ -37,17 +49,32 @@ class _MainPageState extends State<MainPage> {
           height: 60,
           // Color only whan dark, leave bicolor when light
           color: Theme.of(context).brightness == Brightness.dark ? Theme.of(context).accentColor : null),
-      actionButton: Material(
-        elevation: 6,
-        borderRadius: BorderRadius.circular(35),
-        color: Theme.of(context).accentColor,
-        child: ButtonTheme(
-          height: 60,
-          minWidth: 60,
-          child: FlatButton(
+      actionButton: ButtonTheme(
+        minWidth: 60,
+        height: 60,
+        child: Hero(
+          flightShuttleBuilder: (flightContext, animation, direction, fromContext, toContext) {
+          
+            Hero toHero = direction == HeroFlightDirection.push ? toContext.widget : fromContext.widget;
+
+            return CornerRadiusTransition(
+              child: toHero.child,
+              startCornerRadius: 30,
+              endCornerRadius: 8,
+              sizeAnim: animation,
+            );
+          },
+          createRectTween: MainPage.createRectTween,
+          tag: 'fab',
+          child: RaisedButton(
+            elevation: 8,
+            highlightElevation: 2,
+            color: Theme.of(context).accentColor,
             child: Icon(Icons.add),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-            onPressed: () {},
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            onPressed: () {
+              Navigator.push(context, TransparentPageRoute(builder: (context) => AddPage()));
+            },
           ),
         ),
       ),

@@ -112,10 +112,14 @@ class _ScaffoldWithBackdropDrawerState extends State<ScaffoldWithBackdropDrawer>
               }
               _dragging = false;
             },
-            child: Transform.translate(
-              // Use the controller's value while dragged, the animation's value when opened by tapping
-              offset: Offset((_dragging ? _controller : _drawerCurve).value * widget.maximumDrawerWidth, 0),
-              
+            child: Transform(
+              transform: Matrix4.identity()
+                /*..setEntry(3, 2, 0.0004)
+                ..rotateY((_dragging ? _controller : _drawerCurve).value * 0.5)*/
+                ..translate(
+                    // Use the controller's value while dragged, the animation's value when opened by tapping
+                    (_dragging ? _controller : _drawerCurve).value * widget.maximumDrawerWidth,
+                    0),
               // The material widget behind the scaffold
               child: Material(
                 elevation: 16,
