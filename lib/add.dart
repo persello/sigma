@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sigma/main.dart';
 import 'package:sigma/widgets/backdrop_drawer_scaffold.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
-import 'package:sigma/widgets/radial_exapnsion.dart';
 
 class AddPage extends StatefulWidget {
   AddPage({Key key}) : super(key: key);
@@ -18,7 +17,7 @@ class _AddPageState extends State<AddPage> {
       children: <Widget>[
         //MainPage(),
         Container(
-          color: Colors.black.withOpacity(0.6),
+          color: Colors.black.withOpacity(0.55),
         ),
 
         Align(
@@ -26,16 +25,42 @@ class _AddPageState extends State<AddPage> {
           child: Hero(
             createRectTween: MainPage.createRectTween,
             tag: 'fab',
-            child: ClipRRect(
+            child: Material(
               borderRadius: BorderRadius.circular(8),
-              child: Material(
-                child: Container(
-
-                  // Changes color based on expense type, default needs selection.
-                  // When it goes into the list, the color will cover only a small strip (or category header?).
-                  color: Theme.of(context).accentColor,
-                  height: 700,
-                  width: 400,
+              elevation: 16,
+              child: SizedBox(
+                width: 400,
+                height: 500,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 6),
+                      // Top should change color based on expense type, default needs selection.
+                      // When it goes into the list, the color will cover only a small strip (or category header?).
+                      color: Colors.transparent,
+                      height: 60,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.close),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          Text(
+                            'Add item',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.add),
+                            onPressed: () {},
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

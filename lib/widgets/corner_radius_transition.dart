@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
 
-class CornerRadiusTransition extends AnimatedWidget {
+class ButtonToCardTransition extends AnimatedWidget {
   final Animation<double> sizeAnim;
   final double startCornerRadius;
   final double endCornerRadius;
-  final ClipRRect child;
+  final Color startColor;
+  final Color endColor;
+  final Widget child;
 
-  CornerRadiusTransition({
-    this.sizeAnim,
-    this.child,
-    this.startCornerRadius,
-    this.endCornerRadius,
-  }) : super(listenable: sizeAnim);
+  ButtonToCardTransition(
+      {this.sizeAnim,
+      this.child,
+      this.startCornerRadius,
+      this.endCornerRadius,
+      this.startColor,
+      this.endColor})
+      : super(listenable: sizeAnim);
 
   @override
   Widget build(BuildContext context) {
     final double delta = endCornerRadius - startCornerRadius;
     return Center(
-        child: ClipRRect(
-      borderRadius: BorderRadius.circular(startCornerRadius + delta * sizeAnim.value),
-      child: child.child,
-    ));
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(startCornerRadius + delta * sizeAnim.value),
+        child: Container(
+          child: child,
+          color: Color.alphaBlend(endColor.withAlpha((sizeAnim.value * 255).toInt()), startColor),
+        ),
+      ),
+    );
   }
 }

@@ -3,7 +3,6 @@ import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:sigma/add.dart';
 import 'package:sigma/widgets/backdrop_drawer_scaffold.dart';
 import 'package:sigma/widgets/corner_radius_transition.dart';
-import 'package:sigma/widgets/radial_exapnsion.dart';
 import 'package:sigma/widgets/transparent_route.dart';
 
 void main() => runApp(SigmaApp());
@@ -14,8 +13,11 @@ class SigmaApp extends StatelessWidget {
     return MaterialApp(
       title: 'Sigma',
       themeMode: ThemeMode.system,
-      theme:
-          ThemeData(brightness: Brightness.light, accentColor: Colors.pink, primaryColor: Colors.white, fontFamily: 'RobotoCondensed'),
+      theme: ThemeData(
+          brightness: Brightness.light,
+          accentColor: Colors.pink,
+          primaryColor: Colors.white,
+          fontFamily: 'RobotoCondensed'),
       darkTheme: ThemeData(brightness: Brightness.dark),
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
@@ -54,15 +56,15 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         height: 60,
         child: Hero(
           flightShuttleBuilder: (flightContext, animation, direction, fromContext, toContext) {
-          
             Hero toHero = direction == HeroFlightDirection.push ? toContext.widget : fromContext.widget;
 
-            return CornerRadiusTransition(
-              child: toHero.child,
-              startCornerRadius: 30,
-              endCornerRadius: 8,
-              sizeAnim: animation,
-            );
+            return ButtonToCardTransition(
+                // child: toHero.child,
+                startCornerRadius: 30,
+                endCornerRadius: 8,
+                sizeAnim: animation,
+                startColor: Theme.of(fromContext).accentColor,
+                endColor: Theme.of(toContext).scaffoldBackgroundColor);
           },
           createRectTween: MainPage.createRectTween,
           tag: 'fab',
