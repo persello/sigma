@@ -1,4 +1,4 @@
-package com.example.sigma
+package it.riccardopersello.sigma
 
 import android.os.Bundle
 import io.flutter.app.FlutterActivity
