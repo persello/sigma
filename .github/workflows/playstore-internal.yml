@@ -13,12 +13,6 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
-    - name: Generate build number
-      uses: einaregilsson/build-number@v2 
-      with:
-        token: ${{secrets.github_token}}
-    - name: Print build number
-      run: echo "Build number is $BUILD_NUMBER"
     - uses: subosito/flutter-action@v1
       with:
         channel: 'stable'
@@ -28,12 +22,18 @@ jobs:
       run: flutter pub get
     - name: Flutter test
       run: flutter test
+    - name: Generate build number
+      uses: einaregilsson/build-number@v2 
+      with:
+        token: ${{secrets.github_token}}
+    - name: Print build number
+      run: echo "Build number is $BUILD_NUMBER"
     - name: Flutter build signed appbundle
       env:
         KEYSTORE_PASSWORD: ${{secrets.KEYSTORE_PASSWORD}}
-      run: flutter build appbundle --build-number $BUILD_NUMBER
-    - name: Debug tree
-      run: tree
+      run: flutter build appbundle --release --build-number $BUILD_NUMBER
+    - name: Debug ls
+      run: ls
     - name: Upload bundle to Play Store (internal channel)
       uses: r0adkll/upload-google-play@v1
       with:
