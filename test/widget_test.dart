@@ -18,6 +18,20 @@ void main() {
     await tester.pumpWidget(SigmaApp());
   });
 
+  testWidgets('Add page open test', (WidgetTester tester) async {
+    // Build main widget
+    await tester.pumpWidget(SigmaApp());
+
+    // Tap FAB and wait for animation to finish
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pumpAndSettle(Duration(milliseconds: 500));
+  });
+
+  // testWidgets('Add page content', (WidgetTester tester) async {
+  //   // Build main widget
+  //   await tester.pumpWidget(SigmaApp());
+  // });
+
   testWidgets('Scaffold with backdrop drawer responds to menu taps', (WidgetTester tester) async {
     int drawerWidth = 500;
 
