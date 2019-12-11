@@ -3,7 +3,7 @@ on: push
 
 jobs:
   build:
-    name: Test, build and create APK
+    name: Test, build and create Appbundle
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -13,9 +13,16 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
         channel: 'stable'
-    - run: flutter pub get
-    - run: flutter test --coverage
-    - run: flutter build apk --split-per-abi
+    - name: Flutter upgrade
+      run: flutter upgrade
+    - name: Flutter get packages
+      run: flutter pub get
+    - name: Flutter test
+      run: flutter test --coverage
+    - name: Flutter build signed appbundle
+      env:
+        KEYSTORE_PASSWORD: ${{secrets.KEYSTORE_PASSWORD}}
+      run: flutter build appbundle --build-number $BUILD_NUMBER
     - name: Parse coverage file
       uses: devmasx/coverage-check-action@v1.1.0
       with:
