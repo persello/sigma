@@ -32,12 +32,14 @@ jobs:
       env:
         KEYSTORE_PASSWORD: ${{secrets.KEYSTORE_PASSWORD}}
       run: flutter build appbundle --release --build-number $BUILD_NUMBER
-    - name: Debug ls
-      run: ls
+    - name: Key to file
+      env:
+        KEY_JSON_CONTENT: ${{secrets.PLAY_STORE_JSON}}
+      run: echo $KEY_JSON_CONTENT > ./private_key.json
     - name: Upload bundle to Play Store (internal channel)
       uses: r0adkll/upload-google-play@v1
       with:
-        serviceAccountJson: ${{secrets.PLAY_STORE_JSON}}
+        serviceAccountJson: ./private_key.json
         packageName: it.riccardopersello.sigma
         releaseFile: ./build/app/outputs/bundle/release/app-release.aab
         track: internal
