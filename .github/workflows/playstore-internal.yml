@@ -31,7 +31,9 @@ jobs:
     - name: Flutter build signed appbundle
       env:
         KEYSTORE_PASSWORD: ${{secrets.KEYSTORE_PASSWORD}}
-      run: flutter build appbundle
+      run: flutter build appbundle --build-number $BUILD_NUMBER
+    - name: Debug tree
+      run: tree
     - name: Upload bundle to Play Store (internal channel)
       uses: r0adkll/upload-google-play@v1
       with:
