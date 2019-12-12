@@ -22,7 +22,7 @@ jobs:
     - name: Flutter build signed appbundle
       env:
         KEYSTORE_PASSWORD: ${{secrets.KEYSTORE_PASSWORD}}
-      run: flutter build appbundle --build-number $BUILD_NUMBER
+      run: flutter build appbundle
     - name: Parse coverage file
       uses: devmasx/coverage-check-action@v1.1.0
       with:

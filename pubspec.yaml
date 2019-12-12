@@ -27,6 +27,15 @@ dev_dependencies:
   flutter_driver:
     sdk: flutter
   test: any
+  flutter_launcher_icons: "^0.7.4"
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "res/icon/ios_1024.png"
+  image_path_android: "res/icon/fallback_1024.png"
+  adaptive_icon_background: "res/icon/background_1024.png"
+  adaptive_icon_foreground: "res/icon/foreground_1024.png"
 
 
 # For information on the generic Dart part of this file, see the
@@ -77,5 +86,6 @@ flutter:
     - family: LibreCaslonDisplay
       fonts:
         - asset: res/fonts/LibreCaslonDisplay-Regular.ttf
+        
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
