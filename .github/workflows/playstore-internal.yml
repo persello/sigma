@@ -46,5 +46,5 @@ jobs:
         releaseFile: build/app/outputs/bundle/release/app-release.aab
         track: internal
         whatsNewDirectory: res/whatsnew/
-        mappingFile: /build/app/outputs/mapping/release/mapping.txt
+        mappingFile: build/app/outputs/mapping/release/mapping.txt
       
