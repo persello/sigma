@@ -35,12 +35,16 @@ jobs:
     - name: Key to file
       env:
         KEY_JSON_CONTENT: ${{secrets.PLAY_STORE_JSON}}
-      run: echo $KEY_JSON_CONTENT > ./private_key.json
+      run: echo $KEY_JSON_CONTENT > private_key.json
+    - name: Check bundle existence
+      run: test -f build/app/outputs/bundle/release/app-release.aab && echo "Bundle exists"
     - name: Upload bundle to Play Store (internal channel)
       uses: r0adkll/upload-google-play@v1
       with:
-        serviceAccountJson: ./private_key.json
+        serviceAccountJson: private_key.json
         packageName: it.riccardopersello.sigma
-        releaseFile: ./build/app/outputs/bundle/release/app-release.aab
+        releaseFile: build/app/outputs/bundle/release/app-release.aab
         track: internal
+        whatsNewDirectory: res/whatsnew/
+        mappingFile: build/app/outputs/mapping/release/mapping.txt
       
