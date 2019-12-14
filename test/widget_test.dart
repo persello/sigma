@@ -18,13 +18,23 @@ void main() {
     await tester.pumpWidget(SigmaApp());
   });
 
-  testWidgets('Add page open test', (WidgetTester tester) async {
+  testWidgets('Add page open/close test', (WidgetTester tester) async {
     // Build main widget
     await tester.pumpWidget(SigmaApp());
 
     // Tap FAB and wait for animation to finish
     await tester.tap(find.byIcon(Icons.add));
     await tester.pumpAndSettle(Duration(milliseconds: 500));
+
+    // Find widgets
+    expect(find.byIcon(Icons.close), findsOneWidget);
+    expect(find.byIcon(Icons.add), findsOneWidget);
+    expect(find.text('Add item'), findsOneWidget);
+
+    // Close
+    await tester.tap(find.byIcon(Icons.close));
+    await tester.pumpAndSettle(Duration(milliseconds: 500));
+    expect(find.text('Add item'), findsNothing);
   });
 
   // testWidgets('Add page content', (WidgetTester tester) async {

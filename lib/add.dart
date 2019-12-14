@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sigma/main.dart';
-import 'package:sigma/widgets/backdrop_drawer_scaffold.dart';
-import 'package:outline_material_icons/outline_material_icons.dart';
+import 'package:sigma/widgets/fab_hero_radius.dart';
 
 class AddPage extends StatefulWidget {
   AddPage({Key key}) : super(key: key);
@@ -23,7 +21,7 @@ class _AddPageState extends State<AddPage> {
         Align(
           alignment: Alignment.center,
           child: Hero(
-            createRectTween: MainPage.createRectTween,
+            createRectTween: FloatingActionButtonWithCornerHeroTransition.createRectTween,
             tag: 'fab',
             child: Material(
               borderRadius: BorderRadius.circular(8),
