@@ -11,6 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:sigma/main.dart';
 import 'package:sigma/widgets/backdrop_drawer_scaffold.dart';
+import 'package:sigma/widgets/corner_radius_transition.dart';
 
 void main() {
   testWidgets('Main app pump test', (WidgetTester tester) async {
@@ -37,9 +38,13 @@ void main() {
     expect(find.text('Add item'), findsNothing);
   });
 
-  // testWidgets('Add page content', (WidgetTester tester) async {
-  //   // Build main widget
-  //   await tester.pumpWidget(SigmaApp());
+  // testWidgets('ButtonToCardTransition widget build test.', (WidgetTester tester) async {
+  //   Animation a = Tween(value: 0);
+  //   await tester.pumpWidget(ButtonToCardTransition(
+  //     startCornerRadius: 8,
+  //     endCornerRadius: 10,
+  //     sizeAnim: a,
+  //   ));
   // });
 
   testWidgets('Scaffold with backdrop drawer responds to menu taps', (WidgetTester tester) async {
