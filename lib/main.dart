@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:sigma/add.dart';
@@ -15,7 +16,7 @@ class SigmaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sigma',
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.system,
       theme: ThemeData(
           brightness: Brightness.light, accentColor: Colors.pinkAccent, primaryColor: Colors.blueGrey),
       darkTheme: ThemeData(brightness: Brightness.dark),
@@ -44,9 +45,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   int currentPageIndex = 0;
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    await mainUser.googleLogin().then((s) {
+    login();
+  }
+
+  void login() async {
+    mainUser.signIn().then((s) {
       setState(() {
         mainUser = mainUser;
       });
@@ -76,9 +81,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             style: Theme.of(context).textTheme.subhead),
         accountEmail: Text(mainUser.firebaseAccount?.email ?? 'No address',
             style: Theme.of(context).textTheme.subtitle),
-        currentAccountPicture: (mainUser.firebaseAccount == null)
-            ? ClipOval(child: Image.asset('res/sigma_letter_br.png'))
-            : ClipOval(child: Image.network(mainUser.firebaseAccount.photoUrl)),
+        currentAccountPicture: ClipOval(
+          child: CachedNetworkImage(
+            placeholder: (context, url) => CircularProgressIndicator(),
+            imageUrl: mainUser.firebaseAccount?.photoUrl,
+            errorWidget: (context, url, error) => Image.asset('res/sigma_letter_br.png'),
+          ),
+        ),
         decoration: BoxDecoration(color: Theme.of(context).cardColor),
         onDetailsPressed: () {
           Navigator.of(context).pushNamed('/login');
