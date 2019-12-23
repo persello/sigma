@@ -1,5 +1,19 @@
 import 'package:flutter/material.dart';
 
+/// An item of the side drawer. Usually leads to another page.
+class DrawerMenuEntry {
+  DrawerMenuEntry({@required this.name, @required this.onPressed, this.icon});
+
+  /// The icon shown before the name.
+  final IconData icon;
+
+  /// The name of the entry.
+  final String name;
+
+  /// The function called when the button is pressed. The drawer is closed automatically.
+  final Function() onPressed;
+}
+
 /// A [Scaffold] with a drawer which appears under it.
 ///
 /// The drawer contains [drawerContent] and whan opened has a width of [maximumDrawerWidth],
@@ -7,14 +21,23 @@ import 'package:flutter/material.dart';
 /// specifies the content of the [Scaffold]'s body.
 class ScaffoldWithBackdropDrawer extends StatefulWidget {
   ScaffoldWithBackdropDrawer(
-      {Key key, this.body, this.drawerContent, this.title, this.maximumDrawerWidth = 250, this.actionButton})
+      {Key key,
+      this.body,
+      this.drawerHeader,
+      @required this.drawerEntries,
+      this.title,
+      this.maximumDrawerWidth = 250,
+      this.actionButton})
       : super(key: key);
 
   /// The content of the [Scaffold]'s body.
   final Widget body;
 
-  /// The content of the side drawer.
-  final Widget drawerContent;
+  /// The header of the side drawer.
+  final Widget drawerHeader;
+
+  /// The drawer's menu items.
+  final List<DrawerMenuEntry> drawerEntries;
 
   /// The floating action button.
   final Widget actionButton;
@@ -34,6 +57,8 @@ class _ScaffoldWithBackdropDrawerState extends State<ScaffoldWithBackdropDrawer>
   // Animation
   AnimationController _controller;
   Animation _drawerCurve;
+
+  int selectedEntry = 0;
 
   // Interaction
   bool _dragging = false;
@@ -69,8 +94,41 @@ class _ScaffoldWithBackdropDrawerState extends State<ScaffoldWithBackdropDrawer>
       color: Theme.of(context).scaffoldBackgroundColor,
       child: Stack(
         children: <Widget>[
-          // Drawer content first, so it goes below
-          widget.drawerContent,
+          // Drawer content
+          Material(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                widget.drawerHeader,
+                // Builds a list of FlatButtons
+                Flexible(
+                  child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: widget.drawerEntries?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      return FlatButton(
+                        child: ListTile(
+                          leading: Icon(widget.drawerEntries[index].icon),
+                          title: Text(widget.drawerEntries[index].name),
+                          selected: index == selectedEntry,
+                        ),
+                        onPressed: () {
+                          // Update last selection
+                          setState(() {
+                            selectedEntry = index;
+                          });
+
+                          // Closes the drawer then calls the associated function
+                          _controller.reverse();
+                          widget.drawerEntries[index].onPressed();
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
 
           // Then the scaffold's container
           GestureDetector(

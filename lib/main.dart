@@ -13,7 +13,7 @@ class SigmaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sigma',
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.system,
       theme: ThemeData(
           brightness: Brightness.light,
           accentColor: Colors.pinkAccent,
@@ -61,44 +61,20 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           Navigator.push(context, TransparentPageRoute(builder: (context) => AddPage()));
         },
       ),
-      drawerContent: Material(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text('Name Surname', style: Theme.of(context).textTheme.subhead),
-              accountEmail: Text('mail@example.com', style: Theme.of(context).textTheme.subtitle),
-              currentAccountPicture: Image.asset('res/sigma_letter_br.png'),
-              decoration: BoxDecoration(color: Theme.of(context).cardColor),
-            ),
-            FlatButton(
-              child:
-                  ListTile(leading: Icon(OMIcons.home), title: Text('Home'), selected: currentPageIndex == 0),
-              onPressed: () {
-                if (currentPageIndex != 0) secondaryNavigatorKey.currentState.pushNamed('/home');
-                // INTEGRATE IN SCAFFOLD FOR CONTROLLING WHEN TO CLOSE.
-              },
-            ),
-            FlatButton(
-              child: ListTile(leading: Icon(OMIcons.attachMoney), title: Text('Section')),
-              onPressed: () {},
-            ),
-            FlatButton(
-              child: ListTile(leading: Icon(OMIcons.creditCard), title: Text('Section 2')),
-              onPressed: () {},
-            ),
-            Divider(),
-            FlatButton(
-              child: ListTile(leading: Icon(OMIcons.settings), title: Text('Settings')),
-              onPressed: () {},
-            ),
-            FlatButton(
-              child: ListTile(leading: Icon(OMIcons.info), title: Text('Help and feedback')),
-              onPressed: () {},
-            ),
-          ],
-        ),
+      drawerHeader: UserAccountsDrawerHeader(
+        accountName: Text('Name Surname', style: Theme.of(context).textTheme.subhead),
+        accountEmail: Text('mail@example.com', style: Theme.of(context).textTheme.subtitle),
+        currentAccountPicture: Image.asset('res/sigma_letter_br.png'),
+        decoration: BoxDecoration(color: Theme.of(context).cardColor),
       ),
+      drawerEntries: <DrawerMenuEntry> [
+        DrawerMenuEntry(name: 'Home', icon: OMIcons.home, onPressed: () {}),
+        DrawerMenuEntry(name: 'Accounts', icon: OMIcons.attachMoney, onPressed: () {}),
+        DrawerMenuEntry(name: 'Data', icon: OMIcons.barChart, onPressed: () {}),
+        DrawerMenuEntry(name: 'History', icon: OMIcons.calendarToday, onPressed: () {}),
+        DrawerMenuEntry(name: 'Settings', icon: OMIcons.settings, onPressed: () {}),
+        DrawerMenuEntry(name: 'Help and feedback', icon: OMIcons.info, onPressed: () {}),
+      ],
       body: Navigator(
         key: secondaryNavigatorKey,
         initialRoute: '/home',

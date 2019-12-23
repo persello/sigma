@@ -54,7 +54,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         home: ScaffoldWithBackdropDrawer(
       maximumDrawerWidth: drawerWidth,
-      drawerContent: Text('DRAWER CONTENT'),
+      /// TODO: Add drawer entries test.
       body: Text('BODY CONTENT'),
     )));
 
