@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:sigma/add.dart';
+import 'package:sigma/classes/user.dart';
 import 'package:sigma/home.dart';
 import 'package:sigma/login.dart';
 import 'package:sigma/widgets/backdrop_drawer_scaffold.dart';
@@ -43,6 +44,16 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   int currentPageIndex = 0;
 
   @override
+  void initState() async {
+    super.initState();
+    await mainUser.googleLogin().then((s) {
+      setState(() {
+        mainUser = mainUser;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Backdrop
     return ScaffoldWithBackdropDrawer(
@@ -61,9 +72,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         },
       ),
       drawerHeader: UserAccountsDrawerHeader(
-        accountName: Text('Guest', style: Theme.of(context).textTheme.subhead),
-        accountEmail: Text('No address', style: Theme.of(context).textTheme.subtitle),
-        currentAccountPicture: Image.asset('res/sigma_letter_br.png'),
+        accountName: Text(mainUser.firebaseAccount?.displayName ?? 'Guest',
+            style: Theme.of(context).textTheme.subhead),
+        accountEmail: Text(mainUser.firebaseAccount?.email ?? 'No address',
+            style: Theme.of(context).textTheme.subtitle),
+        currentAccountPicture: (mainUser.firebaseAccount == null)
+            ? ClipOval(child: Image.asset('res/sigma_letter_br.png'))
+            : ClipOval(child: Image.network(mainUser.firebaseAccount.photoUrl)),
         decoration: BoxDecoration(color: Theme.of(context).cardColor),
         onDetailsPressed: () {
           Navigator.of(context).pushNamed('/login');
