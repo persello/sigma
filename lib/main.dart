@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:sigma/add.dart';
 import 'package:sigma/home.dart';
+import 'package:sigma/login.dart';
 import 'package:sigma/widgets/backdrop_drawer_scaffold.dart';
 import 'package:sigma/widgets/fab_hero_radius.dart';
 import 'package:sigma/widgets/transparent_route.dart';
@@ -13,18 +14,16 @@ class SigmaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sigma',
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
       theme: ThemeData(
-          brightness: Brightness.light,
-          accentColor: Colors.pinkAccent,
-          primaryColor: Colors.blueGrey,
-          fontFamily: 'RobotoCondensed'),
+          brightness: Brightness.light, accentColor: Colors.pinkAccent, primaryColor: Colors.blueGrey),
       darkTheme: ThemeData(brightness: Brightness.dark),
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (context) => MainPage(),
         '/home': (context) => HomePage(),
         '/home/add': (context) => AddPage(),
+        '/login': (context) => LoginPage(),
       },
     );
   }
@@ -62,12 +61,15 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         },
       ),
       drawerHeader: UserAccountsDrawerHeader(
-        accountName: Text('Name Surname', style: Theme.of(context).textTheme.subhead),
-        accountEmail: Text('mail@example.com', style: Theme.of(context).textTheme.subtitle),
+        accountName: Text('Guest', style: Theme.of(context).textTheme.subhead),
+        accountEmail: Text('No address', style: Theme.of(context).textTheme.subtitle),
         currentAccountPicture: Image.asset('res/sigma_letter_br.png'),
         decoration: BoxDecoration(color: Theme.of(context).cardColor),
+        onDetailsPressed: () {
+          Navigator.of(context).pushNamed('/login');
+        },
       ),
-      drawerEntries: <DrawerMenuEntry> [
+      drawerEntries: <DrawerMenuEntry>[
         DrawerMenuEntry(name: 'Home', icon: OMIcons.home, onPressed: () {}),
         DrawerMenuEntry(name: 'Accounts', icon: OMIcons.attachMoney, onPressed: () {}),
         DrawerMenuEntry(name: 'Data', icon: OMIcons.barChart, onPressed: () {}),

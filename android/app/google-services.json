@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "565360362923",
+    "firebase_url": "https://sigma-rp.firebaseio.com",
+    "project_id": "sigma-rp",
+    "storage_bucket": "sigma-rp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:565360362923:android:776d63d41a9c6cb715feee",
+        "android_client_info": {
+          "package_name": "it.riccardopersello.sigma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "565360362923-lckoopbkphgf98rt27q82eq7n72pbd7p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.riccardopersello.sigma",
+            "certificate_hash": "225099e94dd778af671af491d5b53c11691b7b6e"
+          }
+        },
+        {
+          "client_id": "565360362923-1qo2o4v4gfj8g1rab8fuv7a8orr0ficf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVpYYrlFOPh5ypcO05fOcfOv51bqhIKXY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "565360362923-1qo2o4v4gfj8g1rab8fuv7a8orr0ficf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

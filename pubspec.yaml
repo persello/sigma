@@ -20,6 +20,13 @@ dependencies:
   outline_material_icons: ^0.1.1
   flutter:
     sdk: flutter
+  firebase_core: ^0.4.3+1
+  # Add the dependency for the FlutterFire plugin for Google Analytics
+  firebase_analytics: ^5.0.2
+  # Add the dependencies for any other Firebase products you want to use in your app
+  # For example, to use Firebase Authentication and Cloud Firestore
+  firebase_auth: ^0.15.3
+  cloud_firestore: ^0.12.9+5
 
 dev_dependencies:
   flutter_test:
@@ -36,7 +43,6 @@ flutter_icons:
   image_path_android: "res/icon/foreground_1024.png"
   adaptive_icon_background: "res/icon/background_1024.png"
   adaptive_icon_foreground: "res/icon/foreground_1024.png"
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -86,6 +92,5 @@ flutter:
     - family: LibreCaslonDisplay
       fonts:
         - asset: res/fonts/LibreCaslonDisplay-Regular.ttf
-        
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

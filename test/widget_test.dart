@@ -11,7 +11,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:sigma/main.dart';
 import 'package:sigma/widgets/backdrop_drawer_scaffold.dart';
-import 'package:sigma/widgets/corner_radius_transition.dart';
 
 void main() {
   testWidgets('Main app pump test', (WidgetTester tester) async {
