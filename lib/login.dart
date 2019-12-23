@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -8,6 +10,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<FirebaseUser> _handleSignIn() async {
+    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+    print("signed in " + user.displayName);
+    return user;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
                       'Log in to Sigma',
                       style: Theme.of(context).textTheme.display1,
                     ),
-                    Image.asset('res/icon/fallback_1024.png'),
+                    Image.asset('res/icon/foreground_1024.png'),
                   ],
                 ),
               ),
@@ -45,7 +64,9 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text(
                     'LOG IN',
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    _handleSignIn().then((FirebaseUser user) => print(user)).catchError((e) => print(e));
+                  },
                 )
               ],
             )

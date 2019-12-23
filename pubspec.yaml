@@ -27,6 +27,7 @@ dependencies:
   # For example, to use Firebase Authentication and Cloud Firestore
   firebase_auth: ^0.15.3
   cloud_firestore: ^0.12.9+5
+  google_sign_in: ^4.1.1
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +61,7 @@ flutter:
   #  - images/a_dot_ham.jpeg
   assets:
     - res/sigma_letter_br.png
+    - res/icon/foreground_1024.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
