@@ -8,6 +8,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:outline_material_icons/outline_material_icons.dart';
 
 import 'package:sigma/main.dart';
 import 'package:sigma/widgets/backdrop_drawer_scaffold.dart';
@@ -50,15 +51,20 @@ void main() {
     int drawerWidth = 500;
 
     // Build scaffold
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(
+      MaterialApp(
         home: ScaffoldWithBackdropDrawer(
-      maximumDrawerWidth: drawerWidth,
-      /// TODO: Add drawer entries test.
-      body: Text('BODY CONTENT'),
-    )));
+          drawerEntries: <DrawerMenuEntry>[
+            DrawerMenuEntry(name: 'DRAWER ITEM 1', icon: OMIcons.home, onPressed: () {})
+          ],
+          maximumDrawerWidth: drawerWidth,
+          body: Text('BODY CONTENT'),
+        ),
+      ),
+    );
 
     // Check widget presence
-    expect(find.text('DRAWER CONTENT'), findsOneWidget);
+    expect(find.text('DRAWER ITEM 1'), findsOneWidget);
     expect(find.text('BODY CONTENT'), findsOneWidget);
 
     // Drawer icon tap

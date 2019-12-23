@@ -83,8 +83,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             style: Theme.of(context).textTheme.subtitle),
         currentAccountPicture: ClipOval(
           child: CachedNetworkImage(
-            placeholder: (context, url) => CircularProgressIndicator(),
-            imageUrl: mainUser.firebaseAccount?.photoUrl,
+            placeholder: (context, url) => Image.asset('res/sigma_letter_br.png'),
+            imageUrl: mainUser.firebaseAccount?.photoUrl ?? '',
             errorWidget: (context, url, error) => Image.asset('res/sigma_letter_br.png'),
           ),
         ),

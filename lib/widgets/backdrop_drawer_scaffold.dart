@@ -99,7 +99,7 @@ class _ScaffoldWithBackdropDrawerState extends State<ScaffoldWithBackdropDrawer>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                widget.drawerHeader,
+                widget.drawerHeader ?? Container(),
                 // Builds a list of FlatButtons
                 Flexible(
                   child: ListView.builder(
