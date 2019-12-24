@@ -48,7 +48,7 @@ void main() {
   // });
 
   testWidgets('Scaffold with backdrop drawer responds to menu taps', (WidgetTester tester) async {
-    int drawerWidth = 500;
+    double drawerWidth = 500;
 
     // Build scaffold
     await tester.pumpWidget(
