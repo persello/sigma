@@ -80,14 +80,13 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
                     onPressed: () {
                       mainUser.googleLogin().then((s) => setState(() {}));
                     }),
-            
-                ButtonMaterialMenuItem(
-                    title: 'Delete your account',
-                    subtitle: 'Delete all your data from the Sigma app and server',
-                    // onPressed: (mainUser.firebaseAccount != null) ? () {
-                    //   mainUser.deleteAccount().then((s) => setState(() {}));
-                    // } : null,
-                  )
+            ButtonMaterialMenuItem(
+              title: 'Delete your account',
+              subtitle: 'Delete all your data from the Sigma app and server',
+              // onPressed: (mainUser.firebaseAccount != null) ? () {
+              //   mainUser.deleteAccount().then((s) => setState(() {}));
+              // } : null,
+            )
           ],
         ),
       ),

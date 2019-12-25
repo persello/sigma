@@ -113,7 +113,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 body = SettingsPage();
               });
             }),
-        DrawerMenuEntry(name: 'Help and feedback', icon: OMIcons.info, onPressed: () {}),
+        DrawerMenuEntry(name: 'Info and feedback', icon: OMIcons.info, onPressed: () {}),
       ],
       body: body,
     );

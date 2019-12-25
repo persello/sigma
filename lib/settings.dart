@@ -16,9 +16,10 @@ class _SettingsPageState extends State<SettingsPage> {
     return Material(
       child: ListView(
         children: <Widget>[
-          ButtonMaterialMenuItem(title: 'Theme', subtitle: 'Green, system brightness'),
+          ButtonMaterialMenuItem(title: 'Appearance', subtitle: 'Green, system brightness'),
+          ButtonMaterialMenuItem(title: 'Accounts', subtitle: 'Add, edit or remove accounts and cards'),
           ButtonMaterialMenuItem(
-            title: 'User',
+            title: 'Google account',
             subtitle: '${mainUser.firebaseAccount?.displayName ?? 'Log in with Google'}',
             isLastItem: true,
             onPressed: () {

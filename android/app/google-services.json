@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "565360362923-fnvptc8q8f1gkrvgh23094m0d5dpemon.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.riccardopersello.sigma",
+            "certificate_hash": "2b152d5a01b37fc7c856f17ee1765763d455a763"
+          }
+        },
+        {
           "client_id": "565360362923-lckoopbkphgf98rt27q82eq7n72pbd7p.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
