@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'dart:math' as Math;
 import 'package:sigma/widgets/fab_hero_radius.dart';
+import 'package:sigma/widgets/list_menu_items.dart';
+import 'package:sigma/widgets/custom_text_styles.dart';
 
 class AddPage extends StatefulWidget {
   AddPage({Key key}) : super(key: key);
@@ -8,57 +12,254 @@ class AddPage extends StatefulWidget {
   _AddPageState createState() => _AddPageState();
 }
 
-class _AddPageState extends State<AddPage> {
+class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
+  AnimationController opacityController;
+  Animation<double> opacityAnimation;
+
+  AnimationController rotationController;
+  Animation<double> rotationAnimation;
+
+  bool flipped = false;
+
+  List titles = ['item', 'income', 'expense', 'internal transfer'];
+
+  int selectedMenu = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initializa opacity animation
+    opacityController = AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    opacityAnimation = Tween(begin: 0.0, end: 1.0).animate(opacityController)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    // Start opacity animation
+    opacityController.forward();
+
+    // Initializa rotation animation
+    rotationController = AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    Animation rotationCurve = CurvedAnimation(curve: Curves.easeInOut, parent: rotationController);
+    rotationAnimation = Tween(begin: 0.0, end: Math.pi).animate(rotationCurve)
+      ..addListener(() {
+        setState(() {
+          flipped = rotationController.value >= 0.5;
+        });
+      });
+  }
+
+  Widget buildSubmenu(int selected, bool isFlipped) {
+    if (isFlipped)
+      return Container(
+        color: Colors.amber,
+        height: 300,
+      );
+    else
+      switch (selected) {
+        case 0:
+          return FadeTransition(opacity: opacityAnimation, child: buildFirstMenu());
+          break;
+        case 1:
+          return FadeTransition(opacity: opacityAnimation, child: buildIncomeMenu());
+          break;
+        default:
+          return FadeTransition(opacity: opacityAnimation, child: buildFirstMenu());
+      }
+  }
+
+  Widget buildIncomeMenu() {
+    final PageController accountPageController = PageController(initialPage: -1, viewportFraction: 0.8);
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: 106,
+            child: PageView(
+              controller: accountPageController,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(top: 16),
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  child: Material(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8),
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Card name',
+                                style:
+                                    TextStyle(color: Colors.black, fontWeight: FontWeight.w800, fontSize: 14),
+                              ),
+                              Divider(height: 8),
+                              Text('•••• •••• •••• 1234',
+                                  style: TextStyle(
+                                      color: Colors.black, fontWeight: FontWeight.w300, fontSize: 13))
+                            ],
+                          ),
+                          Text('171.43\€',
+                              style: CustomTextStyles.moneyDisplayStyle
+                                  .copyWith(color: Colors.black, fontSize: 22)),
+                        ],
+                      ),
+                    ),
+                    color: Colors.amber,
+                    elevation: 8,
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 16),
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  child: Material(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8),
+                    ),
+                    color: Colors.tealAccent,
+                    elevation: 8,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                boxShadow: [BoxShadow(blurRadius: 16, spreadRadius: -16, offset: Offset(0, -16))],
+                color: Theme.of(context).cardColor),
+            height: 40,
+          ),
+          Container(
+              child: FlatButton(
+            child: Text('FLIP CARD!'),
+            onPressed: () {
+              if (rotationController.status == AnimationStatus.completed)
+                rotationController.reverse();
+              else
+                rotationController.forward();
+            },
+          ))
+        ],
+      ),
+    );
+  }
+
+  Widget buildHeader() {
+    return Container(
+      padding: EdgeInsets.all(6),
+      height: 60,
+      alignment: AlignmentDirectional.topStart,
+      child: Stack(
+        children: <Widget>[
+          (selectedMenu == 0)
+              ? IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                )
+              : IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    if (!flipped) {
+                      setState(() {
+                        selectedMenu = 0;
+                      });
+                      opacityController
+                        ..reset()
+                        ..forward();
+                    } else {
+                      rotationController.reverse();
+                    }
+                  },
+                ),
+          Center(
+            child: Text(
+              'Add ${titles[selectedMenu]}',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildFirstMenu() {
+    return Column(
+      children: <Widget>[
+        ButtonMaterialMenuItem(
+            title: 'Income',
+            leading: Icon(Icons.file_download, color: Colors.tealAccent),
+            onPressed: () {
+              setState(() {
+                selectedMenu = 1;
+              });
+              opacityController
+                ..reset()
+                ..forward();
+            }),
+        ButtonMaterialMenuItem(
+            title: 'Expense', leading: Icon(Icons.file_upload, color: Colors.amberAccent), onPressed: () {}),
+        ButtonMaterialMenuItem(
+            title: 'Internal transfer',
+            leading: Icon(Icons.compare_arrows, color: Colors.pinkAccent),
+            onPressed: () {}),
+        ButtonMaterialMenuItem(
+            title: 'Exchange',
+            leading: Icon(Icons.attach_money, color: Colors.blueAccent),
+            isLastItem: true,
+            onPressed: () {})
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        //MainPage(),
         Container(
           color: Colors.black.withOpacity(0.55),
-        ),
-
-        Align(
-          alignment: Alignment.center,
-          child: Hero(
-            createRectTween: FloatingActionButtonWithCornerHeroTransition.createRectTween,
-            tag: 'fab',
-            child: Material(
-              borderRadius: BorderRadius.circular(8),
-              elevation: 16,
-              child: SizedBox(
-                width: 400,
-                height: 500,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 6),
-                      // Top should change color based on expense type, default needs selection.
-                      // When it goes into the list, the color will cover only a small strip (or category header?).
-                      color: Colors.transparent,
-                      height: 60,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+          //padding: EdgeInsets.symmetric(horizontal: 40, vertical: 120),
+          child: Center(
+            child: Hero(
+              createRectTween: FloatingActionButtonWithCornerHeroTransition.createRectTween,
+              tag: 'fab',
+              child: Transform(
+                transform: Matrix4.identity()
+                  ..setEntry(3, 2, 0.0009)
+                  ..translate((MediaQuery.of(context).size.width - 80) * (rotationAnimation.value / Math.pi))
+                  ..rotateY(rotationAnimation.value),
+                child: Material(
+                  clipBehavior: Clip.antiAlias,
+                  type: MaterialType.card,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  child: AnimatedSize(
+                    vsync: this,
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.fastOutSlowIn,
+                    child: Container(
+                      constraints: BoxConstraints(
+                          maxWidth: (MediaQuery.of(context).size.width < 800)
+                              ? MediaQuery.of(context).size.width - 80
+                              : 720),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          IconButton(
-                            icon: Icon(Icons.close),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          Text(
-                            'Add item',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: () {},
-                          )
+                          FadeTransition(opacity: opacityAnimation, child: buildHeader()),
+                          buildSubmenu(selectedMenu, flipped),
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),

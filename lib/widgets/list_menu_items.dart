@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 class ButtonMaterialMenuItem extends StatelessWidget {
   const ButtonMaterialMenuItem(
-      {Key key, @required this.title, this.subtitle, this.isLastItem = false, this.onPressed})
+      {Key key, @required this.title, this.subtitle, this.isLastItem = false, this.leading, this.onPressed})
       : super(key: key);
 
   final String title;
   final String subtitle;
   final bool isLastItem;
+  final Widget leading;
   final Function() onPressed;
 
   @override
@@ -17,6 +18,7 @@ class ButtonMaterialMenuItem extends StatelessWidget {
         InkWell(
           onTap: onPressed,
           child: ListTile(
+            leading: leading,
             title: Text(title),
             subtitle: subtitle != null ? Text(subtitle) : null,
             enabled: onPressed != null,

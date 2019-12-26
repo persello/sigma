@@ -68,7 +68,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           ? FloatingActionButtonWithCornerHeroTransition(
               icon: Icons.add,
               heroTag: 'fab',
-              toHeroColor: Theme.of(context).scaffoldBackgroundColor,
+              toHeroColor: Theme.of(context).cardColor,
               toHeroCornerRadius: 8,
               onPressed: () {
                 Navigator.push(context, TransparentPageRoute(builder: (context) => AddPage()));
