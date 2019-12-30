@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:sigma/widgets/credit_card_widget.dart';
 import 'dart:math' as Math;
 import 'package:sigma/widgets/fab_hero_radius.dart';
 import 'package:sigma/widgets/list_menu_items.dart';
@@ -78,56 +79,36 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
             child: PageView(
               controller: accountPageController,
               children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(top: 16),
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  child: Material(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8),
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Card name',
-                                style:
-                                    TextStyle(color: Colors.black, fontWeight: FontWeight.w800, fontSize: 14),
-                              ),
-                              Divider(height: 8),
-                              Text('•••• •••• •••• 1234',
-                                  style: TextStyle(
-                                      color: Colors.black, fontWeight: FontWeight.w300, fontSize: 13))
-                            ],
-                          ),
-                          Text('171.43\€',
-                              style: CustomTextStyles.moneyDisplayStyle
-                                  .copyWith(color: Colors.black, fontSize: 22)),
-                        ],
-                      ),
-                    ),
-                    color: Colors.amber,
-                    elevation: 8,
-                  ),
+                CreditCardWidget(
+                  color: Colors.amberAccent,
+                  name: 'Card 1',
+                  amount: '171.43€',
+                  lastNumbers: '1283',
+                  amountTextStyle:
+                      CustomTextStyles.moneyDisplayStyle.copyWith(fontSize: 22),
                 ),
-                Container(
-                  padding: EdgeInsets.only(top: 16),
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  child: Material(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8),
-                    ),
-                    color: Colors.tealAccent,
-                    elevation: 8,
-                  ),
+                CreditCardWidget(
+                  color: Colors.redAccent,
+                  name: 'Card 1',
+                  amount: '171.43€',
+                  lastNumbers: '07341283',
+                  amountTextStyle:
+                      CustomTextStyles.moneyDisplayStyle.copyWith(fontSize: 22),
+                ),
+                CreditCardWidget(
+                  color: Colors.blueAccent,
+                  name: 'Card 1',
+                  amount: '171.43€',
+                  lastNumbers: '712',
+                  amountTextStyle:
+                      CustomTextStyles.moneyDisplayStyle.copyWith(fontSize: 22),
+                ),
+                CreditCardWidget(
+                  color: Colors.tealAccent,
+                  name: 'Card 1',
+                  amount: '171.43€',
+                  amountTextStyle:
+                      CustomTextStyles.moneyDisplayStyle.copyWith(fontSize: 22),
                 ),
               ],
             ),
@@ -236,6 +217,7 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
               child: Transform(
                 transform: Matrix4.identity()
                   ..setEntry(3, 2, 0.0009)
+                  // Correct behavior with different screen sizes
                   ..translate((MediaQuery.of(context).size.width - 80) * (rotationAnimation.value / Math.pi))
                   ..rotateY(rotationAnimation.value),
                 child: Material(
