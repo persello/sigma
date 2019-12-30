@@ -29,7 +29,6 @@ void main() {
 
     // Find widgets
     expect(find.byIcon(Icons.close), findsOneWidget);
-    expect(find.byIcon(Icons.add), findsOneWidget);
     expect(find.text('Add item'), findsOneWidget);
 
     // Close
