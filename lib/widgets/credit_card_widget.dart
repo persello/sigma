@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 
+/// Presents a credit card as a widget.
+/// 
+/// The card should have a [name]. [lastNumbers] is optional and fixed to a maximum of 16 characters.
+/// The displayed number of the card will be [lastNumbers] padded with dots and with correct spacing.
+/// [amount] is a string representing the amount of money contained by the card, and its text is
+/// styled accordingly to what specified in [amountTextStyle]. You can also specify a card [color].
+/// The color of the text contained in the card will be selected automatically in order to be
+/// readable over the selected background. The [elevation] is applied to the [Material] layer of the
+/// card and [cutBottom] specifies whether the card should have its bottom side completely flat, not
+/// rounded (for example when used inside a [CutCarousel]).
 class CreditCardWidget extends StatelessWidget {
   const CreditCardWidget(
       {Key key,
@@ -12,12 +22,25 @@ class CreditCardWidget extends StatelessWidget {
       this.cutBottom = true})
       : super(key: key);
 
+  /// The name of the card.
   final String name;
+
+  /// The last numers of the card (maximum length is 16 characters).
   final String lastNumbers;
+
+  /// Balance of the card.
   final String amount;
+
+  /// [TextStyle] for the amount label.
   final TextStyle amountTextStyle;
+
+  /// Background color.
   final Color color;
+
+  /// Material elevation.
   final double elevation;
+
+  /// Set to [true] if the bottom should not have rounded corners.
   final bool cutBottom;
 
   @override

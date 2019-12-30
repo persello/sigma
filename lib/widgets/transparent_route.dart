@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+/// A route that leaves the previous page visible on the background.
 class TransparentPageRoute extends PageRoute {
   TransparentPageRoute({
     @required this.builder,

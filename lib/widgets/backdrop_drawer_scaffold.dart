@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sigma/widgets/drawer_button.dart';
 
-/// An item of the side drawer. Usually leads to another page.
+/// An item for a side drawer. Usually leads to another page.
 class DrawerMenuEntry {
   DrawerMenuEntry({@required this.name, @required this.onPressed, this.icon});
 
