@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:sigma/add.dart';
+import 'package:sigma/add_test_flippable.dart';
 import 'package:sigma/classes/user.dart';
 import 'package:sigma/home.dart';
 import 'package:sigma/settings.dart';
@@ -71,7 +72,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               toHeroColor: Theme.of(context).cardColor,
               toHeroCornerRadius: 8,
               onPressed: () {
-                Navigator.push(context, TransparentPageRoute(builder: (context) => AddPage()));
+                Navigator.push(context, TransparentPageRoute(builder: (context) => AddTestFlipPage()));       // TODO: Go back to normal add page
               },
             )
           : null,

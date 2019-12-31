@@ -29,8 +29,9 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    // Initializa opacity animation
-    opacityController = AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    // Initialize opacity animation
+    opacityController =
+        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     opacityAnimation = Tween(begin: 0.0, end: 1.0).animate(opacityController)
       ..addListener(() {
         setState(() {});
@@ -40,8 +41,10 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
     opacityController.forward();
 
     // Initializa rotation animation
-    rotationController = AnimationController(duration: Duration(milliseconds: 500), vsync: this);
-    Animation rotationCurve = CurvedAnimation(curve: Curves.easeInOut, parent: rotationController);
+    rotationController =
+        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    Animation rotationCurve =
+        CurvedAnimation(curve: Curves.easeInOut, parent: rotationController);
     rotationAnimation = Tween(begin: 0.0, end: Math.pi).animate(rotationCurve)
       ..addListener(() {
         setState(() {
@@ -59,18 +62,22 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
     else
       switch (selected) {
         case 0:
-          return FadeTransition(opacity: opacityAnimation, child: buildFirstMenu());
+          return FadeTransition(
+              opacity: opacityAnimation, child: buildFirstMenu());
           break;
         case 1:
-          return FadeTransition(opacity: opacityAnimation, child: buildIncomeMenu());
+          return FadeTransition(
+              opacity: opacityAnimation, child: buildIncomeMenu());
           break;
         default:
-          return FadeTransition(opacity: opacityAnimation, child: buildFirstMenu());
+          return FadeTransition(
+              opacity: opacityAnimation, child: buildFirstMenu());
       }
   }
 
   Widget buildIncomeMenu() {
-    final PageController accountPageController = PageController(initialPage: -1, viewportFraction: 0.8);
+    final PageController accountPageController =
+        PageController(initialPage: -1, viewportFraction: 0.8);
     return Container(
       child: Column(
         children: <Widget>[
@@ -114,9 +121,10 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
             ),
           ),
           Container(
-            decoration: BoxDecoration(
-                boxShadow: [BoxShadow(blurRadius: 16, spreadRadius: -16, offset: Offset(0, -16))],
-                color: Theme.of(context).cardColor),
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                  blurRadius: 16, spreadRadius: -16, offset: Offset(0, -16))
+            ], color: Theme.of(context).cardColor),
             height: 40,
           ),
           Container(
@@ -189,7 +197,9 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
                 ..forward();
             }),
         ButtonMaterialMenuItem(
-            title: 'Expense', leading: Icon(Icons.file_upload, color: Colors.amberAccent), onPressed: () {}),
+            title: 'Expense',
+            leading: Icon(Icons.file_upload, color: Colors.amberAccent),
+            onPressed: () {}),
         ButtonMaterialMenuItem(
             title: 'Internal transfer',
             leading: Icon(Icons.compare_arrows, color: Colors.pinkAccent),
@@ -212,18 +222,21 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
           //padding: EdgeInsets.symmetric(horizontal: 40, vertical: 120),
           child: Center(
             child: Hero(
-              createRectTween: FloatingActionButtonWithCornerHeroTransition.createRectTween,
+              createRectTween:
+                  FloatingActionButtonWithCornerHeroTransition.createRectTween,
               tag: 'fab',
               child: Transform(
                 transform: Matrix4.identity()
                   ..setEntry(3, 2, 0.0009)
                   // Correct behavior with different screen sizes
-                  ..translate((MediaQuery.of(context).size.width - 80) * (rotationAnimation.value / Math.pi))
+                  ..translate((MediaQuery.of(context).size.width - 80) *
+                      (rotationAnimation.value / Math.pi))
                   ..rotateY(rotationAnimation.value),
                 child: Material(
                   clipBehavior: Clip.antiAlias,
                   type: MaterialType.card,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
                   child: AnimatedSize(
                     vsync: this,
                     duration: Duration(milliseconds: 300),
@@ -236,7 +249,8 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          FadeTransition(opacity: opacityAnimation, child: buildHeader()),
+                          FadeTransition(
+                              opacity: opacityAnimation, child: buildHeader()),
                           buildSubmenu(selectedMenu, flipped),
                         ],
                       ),

@@ -34,7 +34,7 @@ class ButtonMaterialMenuItem extends StatelessWidget {
             enabled: onPressed != null,
           ),
         ),
-        (!isLastItem) ? Divider(height: 1) : Semantics()
+        if(!isLastItem) Divider(height: 1)
       ],
     );
   }
@@ -63,7 +63,7 @@ class TextMaterialMenuItem extends StatelessWidget {
           title: Text(title),
           subtitle: subtitle != null ? Text(subtitle) : null,
         ),
-        (!isLastItem) ? Divider(height: 1) : Semantics()
+        if(!isLastItem) Divider(height: 1)
       ],
     );
   }
