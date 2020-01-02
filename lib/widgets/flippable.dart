@@ -1,65 +1,135 @@
 import 'dart:math' as Math;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+/// A controller for the [Flippable] widget.
 class FlippableController {
-  Function(bool) handleFlip;
-  void flipFront() => handleFlip(false);
-  void flipBack() => handleFlip(true);
+  // Interface to widget
+  Function(String) _handleNavigation;
+
+  // Interface to user
+
+  /// Navigates to a named page.
+  void navigate(String pageName) => _handleNavigation(pageName);
+
+  // Private variables (accessible by the widget)
+  bool _isFlipped;
+  String _currentRoute;
+
+  // Getters
+
+  /// Returns the current route name. This value is set only after a successful navigation.
+  String get currentRouteName => _currentRoute;
+
+  /// Returns [true] if the card is rotated for more than 90 degrees, [false] otherwise.
+  bool get isFlipped => _isFlipped;
 }
 
 /// A flippable, animated popup that can smoothly transition between multiple pages.
 class Flippable extends StatefulWidget {
   Flippable(
       {Key key,
-      this.frontChildren,
-      this.backChildren,
+      this.frontPages,
+      this.backPages,
+      this.firstPage,
       this.controller,
       this.heroTag,
-      this.heroRectTween,
-      this.initialTransformMatrix})
+      this.maxWidth = 320})
       : super(key: key);
 
-  final List<Widget> frontChildren;
-  final List<Widget> backChildren;
+  final Map<String, WidgetBuilder> frontPages;
+  final Map<String, WidgetBuilder> backPages;
+  final String firstPage;
   final FlippableController controller;
   final Object heroTag;
-  final Tween<Rect> Function(Rect, Rect) heroRectTween;
-  final Matrix4 initialTransformMatrix;
-  // TODO: Add width and parameters
+  final double maxWidth;
 
   @override
   _FlippableState createState() => _FlippableState();
 }
 
 class _FlippableState extends State<Flippable> with TickerProviderStateMixin {
-  AnimationController rotationController;
-  Animation<double> rotationAnimation;
+  AnimationController _rotationController;
+  Animation<double> _rotationAnimation;
 
-  bool halfFlipped = false;
+  WidgetBuilder _frontPageBuilder = (_) => Container(height: 0);
+  WidgetBuilder _backPageBuilder = (_) => Container(height: 0);
+
+  // TODO: Transition between pages with same side
+
+  bool _halfFlipped = false;
 
   @override
   void initState() {
     super.initState();
 
     // Initialize rotation animation
-    rotationController =
+    _rotationController =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
-    Animation rotationCurve =
-        CurvedAnimation(curve: Curves.easeInOut, parent: rotationController);
-    rotationAnimation = Tween(begin: 0.0, end: Math.pi).animate(rotationCurve)
+
+    Animation _rotationCurve =
+        CurvedAnimation(curve: Curves.easeInOut, parent: _rotationController);
+
+    _rotationAnimation = Tween(begin: 0.0, end: Math.pi).animate(_rotationCurve)
       ..addListener(() {
         setState(() {
-          halfFlipped = rotationController.value >= 0.5;
+          // Update internal variable
+          _halfFlipped = _rotationController.value >= 0.5;
+
+          // Update the controller
+          widget.controller._isFlipped = _halfFlipped;
         });
       });
 
+    // Go to first page
+    _handleNavigation(widget.firstPage ?? widget.frontPages.entries.first.key);
+
     // Handle controller callbacks
-    widget.controller.handleFlip = (isBack) {
-      isBack ? rotationController.forward() : rotationController.reverse();
+    widget.controller._handleNavigation = (name) {
+      setState(() {
+        _handleNavigation(name);
+      });
     };
   }
 
-  // TODO: Set transform matrix to default if null.
+  void _handleNavigation(String routeName) {
+    // Set up new page
+    WidgetBuilder newBuilder = widget.frontPages[routeName];
+    if (newBuilder == null) {
+      // Not a front page
+      newBuilder = widget.backPages[routeName];
+      if (newBuilder == null) {
+        // Not a page
+        throw PlatformException(
+            code: 'flippable_inexistent_page',
+            message: 'You are trying to navigate to an non-existent page.',
+            details: '$routeName was not declared among the available pages.');
+      } else {
+        // A back page
+
+        // Set the builder ready
+        _backPageBuilder = newBuilder;
+
+        // Rotate
+        _rotationController.forward();
+
+        // Notify
+        widget.controller._currentRoute = routeName;
+      }
+    } else {
+      // A front page
+
+      // Set the builder ready
+      _frontPageBuilder = newBuilder;
+
+      // Rotate
+      _rotationController.reverse();
+
+      // Notify
+      widget.controller._currentRoute = routeName;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -68,16 +138,13 @@ class _FlippableState extends State<Flippable> with TickerProviderStateMixin {
           color: Colors.black.withOpacity(0.55),
           child: Center(
             child: Hero(
-              //createRectTween: FloatingActionButtonWithCornerHeroTransition.createRectTween,
-              tag: 'fab',
+              tag: widget.heroTag,
               child: Transform(
                 transform: Matrix4.identity()
                   ..setEntry(3, 2, 0.0009)
-                  // Correct behavior with different screen sizes
-                  // TODO: Add center rotation mode
-                  ..translate((MediaQuery.of(context).size.width - 80) *
-                      (rotationAnimation.value / Math.pi))
-                  ..rotateY(rotationAnimation.value),
+                  ..translate(
+                      (widget.maxWidth) * _rotationAnimation.value / Math.pi)
+                  ..rotateY(_rotationAnimation.value),
                 child: Material(
                   clipBehavior: Clip.antiAlias,
                   type: MaterialType.card,
@@ -88,20 +155,19 @@ class _FlippableState extends State<Flippable> with TickerProviderStateMixin {
                     duration: Duration(milliseconds: 300),
                     curve: Curves.fastOutSlowIn,
                     child: Container(
-                        constraints: BoxConstraints(
-                            maxWidth: (MediaQuery.of(context).size.width < 800)
-                                ? MediaQuery.of(context).size.width - 80
-                                : 720),
-                        child: Transform(
-                          alignment: FractionalOffset.center,
-                          transform: Matrix4.identity()
-                            ..rotateY(halfFlipped ? Math.pi : 0),
-                          child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: halfFlipped
-                                  ? widget.backChildren
-                                  : widget.frontChildren),
-                        )),
+                      constraints: BoxConstraints(maxWidth: widget.maxWidth),
+                      child: Transform(
+                        alignment: FractionalOffset.center,
+
+                        // Mirror the back widget
+                        transform: Matrix4.identity()
+                          ..rotateY(_halfFlipped ? Math.pi : 0),
+                        child: _halfFlipped
+                            ? _backPageBuilder(context) ?? Container(height: 0)
+                            : _frontPageBuilder(context) ??
+                                Container(height: 0),
+                      ),
+                    ),
                   ),
                 ),
               ),
