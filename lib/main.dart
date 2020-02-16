@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:sigma/add.dart';
 import 'package:sigma/classes/user.dart';
@@ -15,6 +16,13 @@ void main() => runApp(SigmaApp());
 class SigmaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+      statusBarColor: Colors.transparent,
+    ));
+
+
     return MaterialApp(
       title: 'Sigma',
       themeMode: ThemeMode.system,

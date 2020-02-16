@@ -12,12 +12,13 @@ class CurrencyAmountInput extends StatefulWidget {
 
 class _CurrencyAmountInputState extends State<CurrencyAmountInput> with SingleTickerProviderStateMixin {
   bool isCurrencyChooserShown = false;
+  bool isSearchBoxShown = false;
 
   @override
   Widget build(BuildContext context) {
     return InputDecorator(
       decoration:
-          InputDecoration(border: OutlineInputBorder(), contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8)),
+          InputDecoration(border: OutlineInputBorder(), contentPadding: EdgeInsets.fromLTRB(0, 8, 0, 8)),
       child: AnimatedSize(
         vsync: this,
         duration: Duration(milliseconds: 300),
@@ -48,21 +49,61 @@ class _CurrencyAmountInputState extends State<CurrencyAmountInput> with SingleTi
                     onPressed: () {
                       setState(() {
                         isCurrencyChooserShown = !isCurrencyChooserShown;
+                        isSearchBoxShown = false;
                       });
                     },
                   ),
               ],
             ),
-            if (isCurrencyChooserShown) Divider(endIndent: 20, height: 16),
+            if (isSearchBoxShown && isCurrencyChooserShown) Divider(height: 16, thickness: 1),
+            if (isSearchBoxShown && isCurrencyChooserShown)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Container(width: 20),
+                  Flexible(
+                    child: TextField(
+                      textInputAction: TextInputAction.search,
+                      decoration: InputDecoration.collapsed(
+                          hintText: 'Search a currency...', border: InputBorder.none),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.close,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isSearchBoxShown = false;
+                      });
+                    },
+                  )
+                ],
+              ),
+            if (isCurrencyChooserShown) Divider(height: 16, thickness: 1),
             if (isCurrencyChooserShown)
               Container(
                 height: 40,
+                padding: EdgeInsets.symmetric(horizontal: 1),
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: InkWell(child: Icon(Icons.search), onTap: () {}),
+                    if(!isSearchBoxShown) Container(
+                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: InkWell(
+                          child: Icon(Icons.search),
+                          borderRadius: BorderRadius.circular(20),
+                          onTap: () {
+                            setState(() {
+                              isSearchBoxShown = true;
+                            });
+                          },
+                        ),
+                      ),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 4),
