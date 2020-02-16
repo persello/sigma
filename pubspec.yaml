@@ -30,7 +30,8 @@ dependencies:
   google_sign_in: ^4.1.1
   cached_network_image: ^2.0.0-rc
   intl: ^0.16.0
-
+  keyboard_avoider: ^0.1.2
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -64,6 +65,7 @@ flutter:
   assets:
     - res/sigma_letter_br.png
     - res/icon/foreground_1024.png
+    - res/purse.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

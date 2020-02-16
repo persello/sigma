@@ -88,7 +88,7 @@ class CreditCardWidget extends StatelessWidget {
                       style: TextStyle(color: _textColor, fontWeight: FontWeight.w300, fontSize: 13))
                 ],
               ),
-              Text(amount ?? '', style: amountTextStyle.copyWith(color: _textColor)),
+              Text(amount ?? '', style: amountTextStyle?.copyWith(color: _textColor)?.copyWith(fontSize: 16)),
             ],
           ),
         ),

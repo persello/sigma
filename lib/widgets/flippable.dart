@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:math' as Math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,11 +11,19 @@ class FlippableController {
   // Interface to user
 
   /// Navigates to a named page.
-  void navigate(String pageName) => _handleNavigation(pageName);
+  void navigate(String pageName) {
+    _routeStack?.addLast(_currentRoute);
+    _currentRoute = pageName;
+    _handleNavigation(pageName);
+  }
+
+  /// Navigates back (home when already empty).
+  void pop() => _handleNavigation(_routeStack.removeLast() ?? _currentRoute);
 
   // Private variables (accessible by the widget)
   bool _isFlipped;
   String _currentRoute;
+  Queue<String> _routeStack = Queue<String>();
 
   // Getters
 
@@ -23,6 +32,9 @@ class FlippableController {
 
   /// Returns [true] if the card is rotated for more than 90 degrees, [false] otherwise.
   bool get isFlipped => _isFlipped;
+
+  /// Returns [true] if you are at the root page.
+  bool get stackEmpty => _routeStack.length <= 1;
 }
 
 /// A flippable, animated popup that can smoothly transition between multiple pages.
@@ -31,18 +43,28 @@ class Flippable extends StatefulWidget {
       {Key key,
       this.frontPages,
       this.backPages,
+      this.header,
       this.firstPage,
       this.controller,
-      this.heroTag,
-      this.maxWidth = 320})
+      this.heroTag = '',
+      this.maxWidth = 320,
+      this.onNavigationAccepted,
+      this.onNavigationComplete})
       : super(key: key);
 
   final Map<String, WidgetBuilder> frontPages;
   final Map<String, WidgetBuilder> backPages;
+  final Widget header;
   final String firstPage;
   final FlippableController controller;
   final Object heroTag;
   final double maxWidth;
+
+  /// Called when the route is valid.
+  final Function onNavigationAccepted;
+
+  /// Calles on animation completion.
+  final Function onNavigationComplete;
 
   @override
   _FlippableState createState() => _FlippableState();
@@ -51,6 +73,9 @@ class Flippable extends StatefulWidget {
 class _FlippableState extends State<Flippable> with TickerProviderStateMixin {
   AnimationController _rotationController;
   Animation<double> _rotationAnimation;
+
+  AnimationController _fadeController;
+  Animation<double> _fadeAnimation;
 
   WidgetBuilder _frontPageBuilder = (_) => Container(height: 0);
   WidgetBuilder _backPageBuilder = (_) => Container(height: 0);
@@ -63,29 +88,48 @@ class _FlippableState extends State<Flippable> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    // Initialize rotation animation
-    _rotationController =
-        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    // Initialize fade animation
+    _fadeController = AnimationController(duration: Duration(milliseconds: 500), vsync: this);
 
-    Animation _rotationCurve =
-        CurvedAnimation(curve: Curves.easeInOut, parent: _rotationController);
+    _fadeAnimation = Tween(begin: 0.0, end: 1.0).animate(_fadeController)
+      ..addListener(() => setState(() {}))
+      // Notify completion
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) widget.onNavigationComplete();
+      });
+
+    // Start fade
+    _fadeController.forward();
+
+    // Initialize rotation animation
+    _rotationController = AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+
+    Animation _rotationCurve = CurvedAnimation(curve: Curves.easeInOut, parent: _rotationController);
 
     _rotationAnimation = Tween(begin: 0.0, end: Math.pi).animate(_rotationCurve)
-      ..addListener(() {
-        setState(() {
+      ..addListener(
+        () => setState(() {
           // Update internal variable
           _halfFlipped = _rotationController.value >= 0.5;
 
           // Update the controller
           widget.controller._isFlipped = _halfFlipped;
-        });
+        }),
+      )
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed || status == AnimationStatus.dismissed)
+          widget.onNavigationComplete();
       });
 
-    // Go to first page
-    _handleNavigation(widget.firstPage ?? widget.frontPages.entries.first.key);
+    // Go to first page and set current route
+    setState(() {
+      String firstPageId = widget.firstPage ?? widget.frontPages?.entries?.first?.key;
+      widget.controller._currentRoute = firstPageId;
+      _handleNavigation(firstPageId);
+    });
 
     // Handle controller callbacks
-    widget.controller._handleNavigation = (name) {
+    widget.controller?._handleNavigation = (name) {
       setState(() {
         _handleNavigation(name);
       });
@@ -94,10 +138,10 @@ class _FlippableState extends State<Flippable> with TickerProviderStateMixin {
 
   void _handleNavigation(String routeName) {
     // Set up new page
-    WidgetBuilder newBuilder = widget.frontPages[routeName];
+    WidgetBuilder newBuilder = widget.frontPages != null ? widget.frontPages[routeName] : null;
     if (newBuilder == null) {
       // Not a front page
-      newBuilder = widget.backPages[routeName];
+      newBuilder = widget.frontPages != null ? widget.backPages[routeName] : null;
       if (newBuilder == null) {
         // Not a page
         throw PlatformException(
@@ -115,6 +159,7 @@ class _FlippableState extends State<Flippable> with TickerProviderStateMixin {
 
         // Notify
         widget.controller._currentRoute = routeName;
+        if (widget.onNavigationAccepted != null) widget.onNavigationAccepted();
       }
     } else {
       // A front page
@@ -127,6 +172,7 @@ class _FlippableState extends State<Flippable> with TickerProviderStateMixin {
 
       // Notify
       widget.controller._currentRoute = routeName;
+      if (widget.onNavigationAccepted != null) widget.onNavigationAccepted();
     }
   }
 
@@ -142,14 +188,12 @@ class _FlippableState extends State<Flippable> with TickerProviderStateMixin {
               child: Transform(
                 transform: Matrix4.identity()
                   ..setEntry(3, 2, 0.0009)
-                  ..translate(
-                      (widget.maxWidth) * _rotationAnimation.value / Math.pi)
+                  ..translate((widget.maxWidth) * _rotationAnimation.value / Math.pi)
                   ..rotateY(_rotationAnimation.value),
                 child: Material(
                   clipBehavior: Clip.antiAlias,
                   type: MaterialType.card,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   child: AnimatedSize(
                     vsync: this,
                     duration: Duration(milliseconds: 300),
@@ -160,12 +204,19 @@ class _FlippableState extends State<Flippable> with TickerProviderStateMixin {
                         alignment: FractionalOffset.center,
 
                         // Mirror the back widget
-                        transform: Matrix4.identity()
-                          ..rotateY(_halfFlipped ? Math.pi : 0),
-                        child: _halfFlipped
-                            ? _backPageBuilder(context) ?? Container(height: 0)
-                            : _frontPageBuilder(context) ??
-                                Container(height: 0),
+                        transform: Matrix4.identity()..rotateY(_halfFlipped ? Math.pi : 0),
+                        child: FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              widget.header ?? Container(height: 0),
+                              _halfFlipped
+                                  ? _backPageBuilder(context) ?? Container(height: 0)
+                                  : _frontPageBuilder(context) ?? Container(height: 0),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
