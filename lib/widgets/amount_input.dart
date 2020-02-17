@@ -1,16 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CurrencyAmountInput extends StatefulWidget {
-  CurrencyAmountInput({Key key, this.allowCurrencySelector = true}) : super(key: key);
 
-  final allowCurrencySelector;
+/// An input field for specifying a monetary amount with related currency
+/// selector. Allows for search and custom default suggestion text.
+/// 
+/// Set [allowCurrencySelector] to [false] to inhibit currency selection.
+/// With [defaultText], which defaults to 'Amount', you change the content of
+/// the suggestion label of the amount field.
+/// 
+/// ADD HERE DOCUMENTATION FOR CURRENCIES
+class CurrencyAmountInput extends StatefulWidget {
+  CurrencyAmountInput({
+    Key key,
+    this.allowCurrencySelector = true,
+    this.defaultText = 'Amount',
+  }) : super(key: key);
+
+  final bool allowCurrencySelector;
+  final String defaultText;
+
+  /* List of currencies and default currency */
 
   @override
   _CurrencyAmountInputState createState() => _CurrencyAmountInputState();
 }
 
-class _CurrencyAmountInputState extends State<CurrencyAmountInput> with SingleTickerProviderStateMixin {
+class _CurrencyAmountInputState extends State<CurrencyAmountInput> with TickerProviderStateMixin {
   bool isCurrencyChooserShown = false;
   bool isSearchBoxShown = false;
 
@@ -36,7 +52,7 @@ class _CurrencyAmountInputState extends State<CurrencyAmountInput> with SingleTi
                   child: TextField(
                     textInputAction: TextInputAction.done,
                     inputFormatters: [WhitelistingTextInputFormatter(RegExp(r'^[0-9]*[.]?[0-9]{0,2}'))],
-                    decoration: InputDecoration.collapsed(hintText: 'Amount', border: InputBorder.none),
+                    decoration: InputDecoration.collapsed(hintText: widget.defaultText, border: InputBorder.none),
                     keyboardType: TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
@@ -90,21 +106,22 @@ class _CurrencyAmountInputState extends State<CurrencyAmountInput> with SingleTi
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
-                    if(!isSearchBoxShown) Container(
-                      padding: EdgeInsets.symmetric(horizontal: 4),
-                      child: AspectRatio(
-                        aspectRatio: 1,
-                        child: InkWell(
-                          child: Icon(Icons.search),
-                          borderRadius: BorderRadius.circular(20),
-                          onTap: () {
-                            setState(() {
-                              isSearchBoxShown = true;
-                            });
-                          },
+                    if (!isSearchBoxShown)
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 4),
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: InkWell(
+                            child: Icon(Icons.search),
+                            borderRadius: BorderRadius.circular(20),
+                            onTap: () {
+                              setState(() {
+                                isSearchBoxShown = true;
+                              });
+                            },
+                          ),
                         ),
                       ),
-                    ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 4),
                       child: ChoiceChip(

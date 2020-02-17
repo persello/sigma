@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:sigma/widgets/amount_input.dart';
 import 'package:sigma/widgets/carousel_with_cut.dart';
 import 'package:sigma/widgets/credit_card_widget.dart';
-import 'dart:math' as Math;
-import 'package:sigma/widgets/fab_hero_radius.dart';
 import 'package:sigma/widgets/flippable.dart';
 import 'package:sigma/widgets/list_menu_items.dart';
 import 'package:sigma/widgets/custom_text_styles.dart';

@@ -47,7 +47,11 @@ class PurseWidget extends StatelessWidget {
             : BorderRadius.all(Radius.circular(8)),
         child: Container(
           decoration: BoxDecoration(
-            image: DecorationImage(image: backgroundImage, alignment: Alignment.center, fit: BoxFit.fitWidth),
+            image: DecorationImage(
+                image: backgroundImage,
+                alignment: Alignment.center,
+                fit: BoxFit.fitWidth,
+                colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.multiply)),
             borderRadius: cutBottom
                 ? BorderRadius.only(
                     topLeft: Radius.circular(8),
@@ -59,8 +63,9 @@ class PurseWidget extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+              Text('Cash', style: TextStyle(color: Colors.white),),
               Text(amount ?? '',
                   style: amountTextStyle?.copyWith(color: Colors.white)?.copyWith(fontSize: 16)),
             ],
