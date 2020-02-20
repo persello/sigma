@@ -51,7 +51,9 @@ class PurseWidget extends StatelessWidget {
                 image: backgroundImage,
                 alignment: Alignment.center,
                 fit: BoxFit.fitWidth,
-                colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.multiply)),
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity((Theme.of(context).brightness == Brightness.dark) ? 0.4 : 0),
+                    BlendMode.multiply)),
             borderRadius: cutBottom
                 ? BorderRadius.only(
                     topLeft: Radius.circular(8),
@@ -65,7 +67,10 @@ class PurseWidget extends StatelessWidget {
             textBaseline: TextBaseline.alphabetic,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Cash', style: TextStyle(color: Colors.white),),
+              Text(
+                'Cash',
+                style: TextStyle(color: Colors.white),
+              ),
               Text(amount ?? '',
                   style: amountTextStyle?.copyWith(color: Colors.white)?.copyWith(fontSize: 16)),
             ],

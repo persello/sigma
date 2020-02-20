@@ -19,7 +19,7 @@ class AddPage extends StatefulWidget {
 class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
   FlippableController _controller = FlippableController();
 
-  Widget headerBuilder(String title, bool close) {
+  Widget headerBuilder(String title, bool close, {Function onEllipsisPressed}) {
     return Container(
       padding: EdgeInsets.all(6),
       height: 60,
@@ -29,12 +29,14 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
           close
               ? IconButton(
                   icon: Icon(Icons.close),
+                  tooltip: 'Close popup',
                   onPressed: () {
                     Navigator.pop(context);
                   },
                 )
               : IconButton(
                   icon: Icon(Icons.arrow_back),
+                  tooltip: 'Go back',
                   onPressed: () {
                     _controller.pop();
                   },
@@ -49,6 +51,11 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
               ),
             ),
           ),
+          if (onEllipsisPressed != null)
+            Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                    icon: Icon(Icons.more_horiz), tooltip: 'More details', onPressed: onEllipsisPressed)),
         ],
       ),
     );
@@ -119,24 +126,40 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
 
     return Column(
       children: <Widget>[
-        headerBuilder('Add income', false),
+        headerBuilder('Add income', false,
+            onEllipsisPressed: () => _controller.navigate('add/incomeDetails')),
         CardCarousel(cards: sampleCards),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-          child: Column(
-            children: <Widget>[
-              Form(
-                child: Column(
-                  children: <Widget>[
-                    FormField<double>(
-                      builder: (_) {
-                        return CurrencyAmountInput();
-                      },
-                    )
-                  ],
-                ),
-              )
-            ],
+          child: SingleChildScrollView(
+            // TODO: Scroll not working
+            child: Form(
+              child: Column(
+                children: <Widget>[
+                  FormField<String>(
+                    builder: (_) => InputDecorator(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: TextField(
+                          textInputAction: TextInputAction.next, // TODO: Go to next field
+                          decoration:
+                              InputDecoration.collapsed(hintText: 'Description', border: InputBorder.none),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider(thickness: 0, color: Colors.transparent, height: 8),
+                  FormField<double>(
+                    // TODO: double -> Money
+                    builder: (_) => CurrencyAmountInput(),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
         ButtonBar(
@@ -144,10 +167,54 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
             FlatButton(
               child: Text('Add'),
               onPressed: () {},
-            )
+            ),
           ],
         )
       ],
+    );
+  }
+
+  Widget incomeDetails(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          headerBuilder('Details', false),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            child: Form(
+              child: Column(
+                children: <Widget>[
+                  FormField<String>(
+                    builder: (_) => TextField(
+                      textInputAction: TextInputAction.next, // TODO: Go to next field
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Source',
+                          contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                          ),
+                    ),
+                  ),
+                  Divider(thickness: 0, color: Colors.transparent, height: 8),
+                  FormField<double>(
+                    // TODO: Change text to taxes (will be deducted from the amount set in the previous page) and shown!!!
+                    // TODO: double -> Money
+                    builder: (_) => CurrencyAmountInput(),
+                  ),
+                  Divider(thickness: 0, color: Colors.transparent, height: 8),
+                ],
+              ),
+            ),
+          ),
+          ButtonBar(
+            children: <Widget>[
+              FlatButton(
+                child: Text('Finish'),
+                onPressed: () => _controller.pop(),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -167,6 +234,9 @@ class _AddPageState extends State<AddPage> with TickerProviderStateMixin {
             frontPages: <String, WidgetBuilder>{
               'add/item': mainMenu,
               'add/income': addIncome,
+            },
+            backPages: <String, WidgetBuilder>{
+              'add/incomeDetails': incomeDetails,
             },
           ),
         ),

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 /// An input field for specifying a monetary amount with related currency
 /// selector. Allows for search and custom default suggestion text.
-/// 
+///
 /// Set [allowCurrencySelector] to [false] to inhibit currency selection.
 /// With [defaultText], which defaults to 'Amount', you change the content of
 /// the suggestion label of the amount field.
-/// 
+///
 /// ADD HERE DOCUMENTATION FOR CURRENCIES
 class CurrencyAmountInput extends StatefulWidget {
   CurrencyAmountInput({
@@ -43,77 +42,63 @@ class _CurrencyAmountInputState extends State<CurrencyAmountInput> with TickerPr
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Container(width: 20),
-                Flexible(
-                  child: TextField(
-                    textInputAction: TextInputAction.done,
-                    inputFormatters: [WhitelistingTextInputFormatter(RegExp(r'^[0-9]*[.]?[0-9]{0,2}'))],
-                    decoration: InputDecoration.collapsed(hintText: widget.defaultText, border: InputBorder.none),
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  ),
-                ),
-                Container(
-                    child: Text('🇺🇸'),
-                    padding: EdgeInsets.only(right: widget.allowCurrencySelector ? 0 : 20)),
-                if (widget.allowCurrencySelector)
-                  IconButton(
-                    icon: Icon(isCurrencyChooserShown ? Icons.arrow_drop_up : Icons.arrow_drop_down),
-                    onPressed: () {
-                      setState(() {
-                        isCurrencyChooserShown = !isCurrencyChooserShown;
-                        isSearchBoxShown = false;
-                      });
-                    },
-                  ),
-              ],
+            TextField(
+              textInputAction: TextInputAction.done,
+              inputFormatters: [WhitelistingTextInputFormatter(RegExp(r'^[0-9]*[.]?[0-9]{0,2}'))],
+              decoration: InputDecoration(
+                labelText: widget.defaultText,
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                suffixText: '🇺🇸',
+                suffixIcon: (widget.allowCurrencySelector)
+                    ? IconButton(
+                        icon: Icon(isCurrencyChooserShown ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+                        onPressed: () {
+                          setState(() {
+                            isCurrencyChooserShown = !isCurrencyChooserShown;
+                            isSearchBoxShown = false;
+                          });
+                        })
+                    : null,
+              ),
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
             ),
             if (isSearchBoxShown && isCurrencyChooserShown) Divider(height: 16, thickness: 1),
             if (isSearchBoxShown && isCurrencyChooserShown)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Container(width: 20),
-                  Flexible(
-                    child: TextField(
-                      textInputAction: TextInputAction.search,
-                      decoration: InputDecoration.collapsed(
-                          hintText: 'Search a currency...', border: InputBorder.none),
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.close,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isSearchBoxShown = false;
-                      });
-                    },
-                  )
-                ],
+              TextField(
+                textInputAction: TextInputAction.search,
+                decoration: InputDecoration(
+                    hintText: 'Search a currency...',
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        Icons.close,
+                      ),
+                      tooltip: 'Clear and close the search box',
+                      onPressed: () {
+                        setState(() {
+                          isSearchBoxShown = false;
+                        });
+                      },
+                    )),
               ),
             if (isCurrencyChooserShown) Divider(height: 16, thickness: 1),
             if (isCurrencyChooserShown)
               Container(
-                height: 40,
+                height: 60,
                 padding: EdgeInsets.symmetric(horizontal: 1),
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
                     if (!isSearchBoxShown)
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 4),
+                        padding: EdgeInsets.only(left: 12),
                         child: AspectRatio(
                           aspectRatio: 1,
                           child: InkWell(
                             child: Icon(Icons.search),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(40),
                             onTap: () {
                               setState(() {
                                 isSearchBoxShown = true;
@@ -123,7 +108,8 @@ class _CurrencyAmountInputState extends State<CurrencyAmountInput> with TickerPr
                         ),
                       ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      height: 40,
+                      padding: EdgeInsets.only(left: 12),
                       child: ChoiceChip(
                         selected: true,
                         label: Text('Dollars'),
@@ -133,7 +119,8 @@ class _CurrencyAmountInputState extends State<CurrencyAmountInput> with TickerPr
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      height: 40,
+                      padding: EdgeInsets.only(left: 12),
                       child: ChoiceChip(
                         selected: false,
                         label: Text('Other common currency'),
@@ -143,7 +130,8 @@ class _CurrencyAmountInputState extends State<CurrencyAmountInput> with TickerPr
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      height: 40,
+                      padding: EdgeInsets.only(left: 12),
                       child: ChoiceChip(
                         selected: false,
                         label: Text('Another'),
@@ -153,7 +141,8 @@ class _CurrencyAmountInputState extends State<CurrencyAmountInput> with TickerPr
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      height: 40,
+                      padding: EdgeInsets.only(left: 12),
                       child: ChoiceChip(
                         selected: false,
                         label: Text('Another...'),
@@ -163,7 +152,8 @@ class _CurrencyAmountInputState extends State<CurrencyAmountInput> with TickerPr
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      height: 40,
+                      padding: EdgeInsets.only(left: 12),
                       child: ChoiceChip(
                         selected: false,
                         label: Text('Another...'),
@@ -173,7 +163,8 @@ class _CurrencyAmountInputState extends State<CurrencyAmountInput> with TickerPr
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      height: 40,
+                      padding: EdgeInsets.only(left: 12),
                       child: ChoiceChip(
                         selected: false,
                         label: Text('Enough.'),
