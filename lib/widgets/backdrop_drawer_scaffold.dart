@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sigma/widgets/drawer_button.dart';
 
-/// An item of the side drawer. Usually leads to another page.
+/// An item for a side drawer. Usually leads to another page.
 class DrawerMenuEntry {
   DrawerMenuEntry({@required this.name, @required this.onPressed, this.icon});
 
@@ -46,7 +47,7 @@ class ScaffoldWithBackdropDrawer extends StatefulWidget {
   final Widget title;
 
   /// The maximum expanded size of the side drawer.
-  final int maximumDrawerWidth;
+  final double maximumDrawerWidth;
 
   @override
   _ScaffoldWithBackdropDrawerState createState() => _ScaffoldWithBackdropDrawerState();
@@ -95,38 +96,41 @@ class _ScaffoldWithBackdropDrawerState extends State<ScaffoldWithBackdropDrawer>
       child: Stack(
         children: <Widget>[
           // Drawer content
-          Material(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                widget.drawerHeader ?? Container(),
-                // Builds a list of FlatButtons
-                Flexible(
-                  child: ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: widget.drawerEntries?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      return FlatButton(
-                        child: ListTile(
-                          leading: Icon(widget.drawerEntries[index].icon),
-                          title: Text(widget.drawerEntries[index].name),
+          SizedBox(
+            width: widget.maximumDrawerWidth,
+            child: Material(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  widget.drawerHeader ?? Container(),
+                  // Builds a list of FlatButtons
+                  Flexible(
+                    child: ListView.builder(
+                      padding: EdgeInsets.only(right: 8),
+                      physics: BouncingScrollPhysics(),
+                      itemCount: widget.drawerEntries?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return DrawerButton(
+                          icon: widget.drawerEntries[index].icon,
+                          name: widget.drawerEntries[index].name,
+                          rightSideCornerRadius: 32,
                           selected: index == selectedEntry,
-                        ),
-                        onPressed: () {
-                          // Update last selection
-                          setState(() {
-                            selectedEntry = index;
-                          });
+                          onPressed: () {
+                            // Update last selection
+                            setState(() {
+                              selectedEntry = index;
+                            });
 
-                          // Closes the drawer then calls the associated function
-                          _controller.reverse();
-                          widget.drawerEntries[index].onPressed();
-                        },
-                      );
-                    },
+                            // Closes the drawer then calls the associated function
+                            _controller.reverse();
+                            widget.drawerEntries[index].onPressed();
+                          },
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
 

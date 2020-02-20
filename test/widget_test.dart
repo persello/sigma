@@ -25,16 +25,15 @@ void main() {
 
     // Tap FAB and wait for animation to finish
     await tester.tap(find.byIcon(Icons.add));
-    await tester.pumpAndSettle(Duration(milliseconds: 500));
+    await tester.pumpAndSettle();
 
     // Find widgets
     expect(find.byIcon(Icons.close), findsOneWidget);
-    expect(find.byIcon(Icons.add), findsOneWidget);
     expect(find.text('Add item'), findsOneWidget);
 
     // Close
     await tester.tap(find.byIcon(Icons.close));
-    await tester.pumpAndSettle(Duration(milliseconds: 500));
+    await tester.pumpAndSettle();
     expect(find.text('Add item'), findsNothing);
   });
 
@@ -48,7 +47,7 @@ void main() {
   // });
 
   testWidgets('Scaffold with backdrop drawer responds to menu taps', (WidgetTester tester) async {
-    int drawerWidth = 500;
+    double drawerWidth = 500;
 
     // Build scaffold
     await tester.pumpWidget(
@@ -74,14 +73,14 @@ void main() {
 
     // Tap icon
     await tester.tap(find.byType(AnimatedIcon));
-    await tester.pumpAndSettle(Duration(milliseconds: 500));
+    await tester.pumpAndSettle();
 
     // Menu is opened
     assert(tester.getTopLeft(find.byType(Scaffold)).dx == drawerWidth.toDouble());
 
     // Tap icon again
     await tester.tap(find.byType(AnimatedIcon));
-    await tester.pumpAndSettle(Duration(milliseconds: 500));
+    await tester.pumpAndSettle();
 
     // Menu is closed
     assert(tester.getTopLeft(find.byType(Scaffold)).dx == 0);
@@ -90,7 +89,7 @@ void main() {
 
     // Drag menu from side to center
     await tester.dragFrom(Offset(10, 100), Offset(drawerWidth.toDouble() / 2, 0));
-    await tester.pumpAndSettle(Duration(milliseconds: 500));
+    await tester.pumpAndSettle();
 
     // Menu is opened
     assert(tester.getTopLeft(find.byType(Scaffold)).dx == drawerWidth.toDouble());
@@ -98,7 +97,7 @@ void main() {
     // Drag menu from center to side
     await tester.dragFrom(
         Offset(drawerWidth.toDouble() + 40, 100), Offset(-(drawerWidth.toDouble() / 2 + 1), 0));
-    await tester.pumpAndSettle(Duration(milliseconds: 500));
+    await tester.pumpAndSettle();
 
     // Menu is closed
     assert(tester.getTopLeft(find.byType(Scaffold)).dx == 0);
@@ -107,7 +106,7 @@ void main() {
 
     // Fling menu from side to center
     await tester.flingFrom(Offset(10, 100), Offset(drawerWidth.toDouble() / 4, 0), 500);
-    await tester.pumpAndSettle(Duration(milliseconds: 500));
+    await tester.pumpAndSettle();
 
     // Menu is opened
     assert(tester.getTopLeft(find.byType(Scaffold)).dx == drawerWidth.toDouble());
@@ -115,7 +114,7 @@ void main() {
     // Drag menu from center to side
     await tester.flingFrom(
         Offset(drawerWidth.toDouble() + 40, 100), Offset(-(drawerWidth.toDouble() / 4), 0), 500);
-    await tester.pumpAndSettle(Duration(milliseconds: 500));
+    await tester.pumpAndSettle();
 
     // Menu is closed
     assert(tester.getTopLeft(find.byType(Scaffold)).dx == 0);
@@ -124,9 +123,31 @@ void main() {
 
     // Drag menu from side but out of start area to center
     await tester.dragFrom(Offset(51, 100), Offset(drawerWidth.toDouble() / 2, 0));
-    await tester.pumpAndSettle(Duration(milliseconds: 500));
+    await tester.pumpAndSettle();
 
     // Menu is closed
     assert(tester.getTopLeft(find.byType(Scaffold)).dx == 0);
+  });
+
+  testWidgets('Navigate settings', (WidgetTester tester) async {
+    // Build main widget
+    await tester.pumpWidget(SigmaApp());
+
+    // Open side menu
+    await tester.tap(find.byType(AnimatedIcon));
+    await tester.pumpAndSettle();
+
+    // Open settings
+    await tester.tap(find.text('Settings'));
+    await tester.pumpAndSettle();
+
+    // Not signed in
+    expect(find.text('Log in with Google'), findsOneWidget);
+
+    // Go to user settings
+    await tester.tap(find.text('Google account'));
+    await tester.pumpAndSettle();
+
+    // TODO: Try to log in, go back and check name
   });
 }

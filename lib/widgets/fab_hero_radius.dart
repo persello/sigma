@@ -62,7 +62,7 @@ class FloatingActionButtonWithCornerHeroTransition extends StatelessWidget {
           // The actual button
           child: RaisedButton(
             elevation: 8,
-            highlightElevation: 2,
+            highlightElevation: 16,
             color: color ?? Theme.of(context).accentColor,
             child: Icon(icon, color: Theme.of(context).iconTheme.color),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
