@@ -237,12 +237,12 @@ packages:
     source: hosted
     version: "0.14.0+3"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.0+2"
+    version: "0.12.0+4"
   http_multi_server:
     dependency: transitive
     description:
@@ -391,12 +391,12 @@ packages:
     source: hosted
     version: "1.6.4"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.1"
+    version: "1.6.1"
   pedantic:
     dependency: transitive
     description:

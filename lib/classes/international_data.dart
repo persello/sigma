@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as HTTP;
 import 'package:money2/money2.dart';
@@ -19,7 +20,7 @@ class InternationalData {
   static List<Country> searchCountry(String term) {}
   static List<Currency> searchCurrency(String term) {}
   static List<Country> getCountriesFromCurrency(String currencyCode) {}
-  static Money getExchangeRate(String fromCurrencyCode, String toCurrencyCode) {}
+  static Money getExchangeRate(String fromCurrencyCode, String toCurrencyCode, {DateTime dateTime}) {}
   static String getFlagEmoji(Country country) {}
 
   // Private methods
@@ -48,7 +49,8 @@ class InternationalData {
     return jsonCountries.map<Country>((json) => Country.fromJson(json)).toList();
   }
 
-  static Future<List<Country>> _fetchCountries() async {
+  @visibleForTesting
+  static Future<List<Country>> fetchCountries() async {
     HTTP.Client client = HTTP.Client();
 
     try {
@@ -62,7 +64,8 @@ class InternationalData {
     }
   }
 
-  static Future<ExchangeRates> _fetchCurrencyData({DateTime dateTime}) async {
+  @visibleForTesting
+  static Future<ExchangeRates> fetchExchangeRates({DateTime dateTime}) async {
     HTTP.Client client = HTTP.Client();
     HTTP.Response response;
 

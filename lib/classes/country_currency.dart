@@ -32,7 +32,7 @@ class Country {
         alpha3Code: json['alpha3Code'] as String,
         altSpellings: json['altSpellings'].cast<String>(),
         currencies: currencies,
-        nameTranslations: json['translations'] != null ? json['translations'] : null);
+        nameTranslations: json['translations'] != null ? Map<String, String>.from(json['translations']) : null);
   }
 
   Map<String, dynamic> toJson() {
