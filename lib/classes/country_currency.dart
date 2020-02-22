@@ -1,5 +1,5 @@
 /// Represents a country and some of its data (alternative names and currency).
-/// 
+///
 /// Can be updated with a JSON file from https://restcountries.eu/.
 class Country {
   String name;
@@ -8,7 +8,6 @@ class Country {
   List<String> altSpellings;
   List<CurrencyData> currencies;
   Map<String, String> nameTranslations;
-  String flag;
 
   Country(
       {this.name,
@@ -16,22 +15,24 @@ class Country {
       this.alpha3Code,
       this.altSpellings,
       this.currencies,
-      this.nameTranslations,
-      this.flag});
+      this.nameTranslations});
 
-  Country.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    alpha2Code = json['alpha2Code'];
-    alpha3Code = json['alpha3Code'];
-    altSpellings = json['altSpellings'].cast<String>();
+  factory Country.fromJson(Map<String, dynamic> json) {
+    List<CurrencyData> currencies;
     if (json['currencies'] != null) {
       currencies = List<CurrencyData>();
       json['currencies'].forEach((v) {
         currencies.add(CurrencyData.fromJson(v));
       });
     }
-    nameTranslations = json['translations'] != null ? json['translations'] : null;
-    flag = json['flag'];
+
+    return Country(
+        name: json['name'] as String,
+        alpha2Code: json['alpha2Code'] as String,
+        alpha3Code: json['alpha3Code'] as String,
+        altSpellings: json['altSpellings'].cast<String>(),
+        currencies: currencies,
+        nameTranslations: json['translations'] != null ? json['translations'] : null);
   }
 
   Map<String, dynamic> toJson() {
@@ -47,7 +48,6 @@ class Country {
     if (this.nameTranslations != null) {
       data['translations'] = this.nameTranslations;
     }
-    data['flag'] = this.flag;
 
     return data;
   }
@@ -65,9 +65,9 @@ class CurrencyData {
   CurrencyData({this.code, this.name, this.symbol});
 
   CurrencyData.fromJson(Map<String, dynamic> json) {
-    code = json['code'];
-    name = json['name'];
-    symbol = json['symbol'];
+    code = json['code'] as String;
+    name = json['name'] as String;
+    symbol = json['symbol'] as String;
   }
 
   Map<String, dynamic> toJson() {
