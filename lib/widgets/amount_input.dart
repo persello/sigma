@@ -68,7 +68,7 @@ class _CurrencyAmountInputState extends State<CurrencyAmountInput> with TickerPr
               TextField(
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
-                    hintText: 'Search a currency...',
+                    hintText: 'Search a country...',
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                     suffixIcon: IconButton(
