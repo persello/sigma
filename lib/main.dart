@@ -22,7 +22,6 @@ class SigmaApp extends StatelessWidget {
       statusBarColor: Colors.transparent,
     ));
 
-
     return MaterialApp(
       title: 'Sigma',
       themeMode: ThemeMode.system,
@@ -74,6 +73,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           color: Theme.of(context).brightness == Brightness.dark ? Theme.of(context).accentColor : null),
       actionButton: (body is HomePage)
           ? FloatingActionButtonWithCornerHeroTransition(
+              color: Theme.of(context).cardColor,
               icon: Icons.add,
               heroTag: 'fab',
               toHeroColor: Theme.of(context).cardColor,
