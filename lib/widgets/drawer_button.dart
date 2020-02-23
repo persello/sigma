@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
 /// A customizable button to be used in a scaffold.
-/// 
+///
 /// It can contain a [name] and an [icon]. Its shape can be customized by adding a corner radius to the right side.
 /// The default color when selected is picked by the current [Theme]'s [accentColor].
 /// Set the [selected] property to [true] when the related page/function is active.
 class DrawerButton extends StatelessWidget {
-  const DrawerButton({
-    Key key,
-    this.icon,
-    @required this.name,
-    this.rightSideCornerRadius = 0,
-    this.selected = false,
-    this.selectedColor,
-    this.selectedColorOpacity = 0.2,
-    @required this.onPressed
-  }) : super(key: key);
+  const DrawerButton(
+      {Key key,
+      this.icon,
+      @required this.name,
+      this.rightSideCornerRadius = 0,
+      this.selected = false,
+      this.selectedColor,
+      this.selectedColorOpacity = 0.2,
+      @required this.onPressed})
+      : super(key: key);
 
   /// The icon to be displayed at the beginning of the button.
   final IconData icon;

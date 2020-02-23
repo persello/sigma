@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sigma/classes/user.dart';
 import 'package:sigma/widgets/list_menu_items.dart';
 
-import 'classes/user.dart';
 
 class UserSettingsPage extends StatefulWidget {
   UserSettingsPage({Key key}) : super(key: key);

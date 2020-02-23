@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sigma/classes/user.dart';
-import 'package:sigma/settings_user.dart';
+import 'package:sigma/settings/user.dart';
 import 'package:sigma/widgets/list_menu_items.dart';
 
 class SettingsPage extends StatefulWidget {

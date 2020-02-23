@@ -5,8 +5,8 @@ import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:sigma/add.dart';
 import 'package:sigma/classes/user.dart';
 import 'package:sigma/home.dart';
-import 'package:sigma/settings.dart';
-import 'package:sigma/settings_user.dart';
+import 'package:sigma/settings/main.dart';
+import 'package:sigma/settings/user.dart';
 import 'package:sigma/widgets/backdrop_drawer_scaffold.dart';
 import 'package:sigma/widgets/fab_hero_radius.dart';
 import 'package:sigma/widgets/transparent_route.dart';
@@ -27,7 +27,7 @@ class SigmaApp extends StatelessWidget {
       title: 'Sigma',
       themeMode: ThemeMode.system,
       theme: ThemeData(
-          brightness: Brightness.light, accentColor: Colors.pinkAccent, primaryColor: Colors.blueGrey),
+          brightness: Brightness.light, accentColor: Colors.amberAccent, primaryColor: Colors.amber),
       darkTheme: ThemeData(brightness: Brightness.dark),
       initialRoute: '/home',
       routes: <String, WidgetBuilder>{
